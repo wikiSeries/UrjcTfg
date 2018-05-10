@@ -1,0 +1,11 @@
+@charset "ISO-8859-1";
+
+.noStyles a{
+	text-decoration: none;
+	pointer-events: none;
+}
+
+.noStyles img, .references, .thumbcaption, .toc, .mw-editsection{
+	display: none;	
+}
+

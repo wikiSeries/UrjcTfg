@@ -1,0 +1,378 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Ficha Serie</title>
+		
+		<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+		
+		<link rel="stylesheet" th:href="@{/css/RatingStyles.css}" />
+		<link rel="stylesheet" th:href="@{/css/MyModals.css}" />
+		<link rel="stylesheet" th:href="@{/css/Botones.css}" />
+		<link rel="stylesheet" th:href="@{/css/Comentario.css}" />
+		<link rel="stylesheet" th:href="@{/css/Comunes.css}" />
+		
+		
+		
+		<script type="text/javascript" src="/webjars/jquery/3.1.1/jquery.min.js"></script>    
+		<script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<!--<script type="text/javascript" src="/webjars/font-awesome/5.0.6/on-server/js/fontawesome-all.js"></script> -->
+		
+		<script src="/webjars/bootbox/4.4.0/bootbox.js"></script>
+		
+		
+		<script type="text/javascript" language="javascript"> 
+			$('.myIframe').css('height', $(window).height()+'px');
+		</script>
+		<script type="text/javascript" th:src="@{/js/YoutubeApi.js}"></script>
+		<script type="text/javascript" th:src="@{/js/RatingFunctions.js}"></script>
+		<script type="text/javascript" th:src="@{/js/TvmazeApi.js}"></script>
+		<script type="text/javascript" th:src="@{/js/CargarFichaSerie.js}"></script>
+		<script type="text/javascript" th:src="@{/js/Comentario.js}"></script>
+		<script type="text/javascript" th:src="@{/js/Botones.js}"></script>
+		
+		
+		
+		
+		
+		
+		
+	</head>
+	
+	<body>
+		
+		<nav class="title navbar navbar-default" role="navigation">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+					
+			    </button>
+				<a class="navbar-brand" style="color:#fff" href="#">Wiki Series</a>	
+			</div>
+			
+			<div class="collapse navbar-collapse navbar-ex1-collapse">
+			    <ul class="nav navbar-nav">
+			      <li><a style="color:#fff" href = "/PaginaPrincipal/1">Inicio</a></li>
+			      <li><a style="color:#fff" href="/MisSeries">Mis Series</a></li>
+			      <li><a style="color:#fff" href="/BusquedaAvanzada">Busqueda avanzada</a></li>
+			      
+			    </ul>
+			  	
+			  	<p class="navbar-text pull-right" id = "usuarioActual" th:attr = "data-usuario = ${nombreUsuario}" style="color:#fff;" th:text="'Hola ' + ${nombreUsuario}"></p>
+			 </div>
+			 
+		</nav>
+		
+		<div class="container">
+		
+			<div class="row">
+			
+				<div class ="col-lg-3">
+					
+					<img class = "maxWidth" th:src ="${urlImagenSerie}"></img>
+					
+					<div th:if="${esAdministrador == true}">
+						<button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary maxWidth">Añadir trailer</button>
+					</div>
+					
+					<div>
+						<button data-toggle="modal" data-target="#squarespaceModal2" class="btn btn-primary maxWidth">Personajes</button>
+					</div>
+					
+					<div>
+						<button data-toggle="modal" data-target="#squarespaceModal3" class="btn btn-primary maxWidth">Temporadas</button>
+					</div>
+					
+					<div class = "row">
+						<div th:switch = "${controlLike}">
+							<div th:case = "true">
+								<div class = "col-lg-6 text-center">
+									<i id = "like" data-color="relleno" class="fa fa-thumbs-up puntero tamanoIcono colorIcono" onclick="cambiarColor()"></i>
+									<p id = "counterLike" th:text = "${contadorLike}"></p>
+								</div>
+			
+							</div>
+							
+							<div th:case = "*">
+								<div class = "col-lg-6 text-center">
+									<i id = "like" data-color="vacio" class="fa fa-thumbs-o-up puntero tamanoIcono colorIcono" onclick="cambiarColor()"></i>
+									<p id = "counterLike" th:text = "${contadorLike}"></p>
+								</div>
+			
+							</div>
+						</div>
+						
+	
+						<div class = "col-lg-6 text-center">
+							<i class="fa fa-plus puntero colorIcono tamanoIcono" th:onclick="'anadirSerie(' + ${idSerie} + ',\'' + ${nombreUsuario} + '\')'" title = "Añadir a mi lista"></i>
+						</div>
+					</div>
+					
+
+					
+				</div>
+				
+				<div class="col-lg-9">
+					<div class = "row">
+						<div class = "col-lg-4">
+							<h1 th:text="${tituloSerie}" th:attr="data-idSerie = ${idSerie}, data-idSerieApi = ${idSerieApi}" id = "serieActual"></h1>
+						</div>
+						
+						<div class = "col-lg-4">
+							<h1> <input class="rating"  id="controlPuntuacion" th:attr = "data-puntuado = ${puntuado}, data-puntuacionMedia = ${media}"/> </h1>
+						</div>
+					
+					</div>
+					
+					<div class = "row">
+						<div class="col-lg-9">
+							<p> <b th:text = "${canalWeb}"></b> <b th:if = "${canalTv != null}" th:text = "'(' + ${canalTv} + ')'"> </b> <a th:if ="${sitioWeb != null}" th:href = "${sitioWeb}">Sitio oficial</a> </p>
+						</div>
+					
+					</div>
+					
+					<div class="row">
+						<div class="col-lg-9">
+							<p th:utext="${descripcionSerie}"></p>
+							<p> <b>Genero:</b> <span th:text = "${generos}"></span> </p>
+							
+						</div>
+					</div>
+					
+					<div class = "row">
+						<div class = "col-lg-4">
+							<p> <b>Puntuacion:</b> <span th:text = "${puntuacion}"></span> </p>
+							<p> <b>Idioma:</b> <span th:text = "${idioma}"></span> </p>
+							
+						</div>
+						
+						<div class = "col-lg-4">
+							<p> <b>Fecha de estreno:</b> <span th:text = "${estreno}"></span> </p>
+							<p> <b>Estado:</b> <span th:text = "${estado}"></span> </p>
+							
+						</div>
+					
+					</div>
+					
+					<div class="row" th:switch="${idVideo}">
+						<div class= "col-lg-9">
+							<img  th:case = "null" class = "maxWidth" th:src = "@{/Images/videoNoAvailable.png}"></img>
+							
+							<iframe th:case = "*" class = "maxWidth" type = "text/html" height = "360" th:src = "${idVideo}" frameborder= "0"></iframe>
+						</div>
+						
+					</div>	
+					
+					<div class = "row" id = "tablonComentarios">
+						<div class="row">
+							<h2>Comentarios<div class="pull-right"><a href="#" id="addacomment" class="btn btn-primary">Añadir comentario</a> </div></h2>
+						</div>
+						<div class="row" id="addcomment" style="display: none;">
+							
+								<textarea class="form-control" id = "textoComentario" placeholder="Introducir comentario..."></textarea><br/>
+								<button class="btn btn-primary" onclick = "enviarComentario()">Enviar</button>
+							
+						</div>
+						<hr></hr>
+						<div class="row comment" th:each = "c : ${comentarios}">
+							<div class="head">
+								<strong class='user' th:text = "${c.usuario.usuario}"></strong>
+								<small th:text = "${c.fecha}"></small>
+							</div>    
+							<p th:text = "${c.mensaje}"></p>
+						</div>
+						
+						<hr></hr>
+					
+					</div>	
+				</div>
+			</div>
+			
+			<div class = "row">
+			
+				<div class = "col-lg-12 spaceTop-25" id = "tablon">
+				
+				</div>
+			
+			</div>
+			
+		</div>
+		
+		<div class="modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+		  <div class="modal-dialog dialog-trailer">
+			<div class="modal-content">
+				<div class="modal-header header-trailer">
+					<button type="button" class="close" data-dismiss="modal" onclick = "limpiarModal()"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+					<h3 class="modal-title" id="lineModalLabel">Añadir trailer</h3>
+				</div>
+				<div class="modal-body body-trailer">
+					<div id="imaginary_container"> 
+		                <div class="input-group stylish-input-group">
+		                    <input id="textoConsulta" type="text" class="form-control"  placeholder="Buscar" />
+		                    <span class="input-group-addon">
+		                        <button type="submit"  onclick="buscarVideo()">Buscar</button>
+		                    </span>
+		                </div>
+            		</div>
+            		<div  id ="tablonResultados">
+            		
+            		</div>
+		            
+				</div>
+				
+			</div>
+		  </div>
+		</div>
+		
+		<div class="modal fade" id="squarespaceModal2" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+		  <div class="modal-dialog dialog-personajes">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+					<h3 class="modal-title" id="lineModalLabel">Personajes</h3>
+				</div>
+				<div class="modal-body body-personajes">
+					
+					<div  class = "row maxWidth">
+						<div th:each = "filaPersonajes : ${personajes}" class = "row">
+							<div th:each = "p : ${filaPersonajes}" class = "col-lg-2 text-center">
+								<img th:src = "${p.urlImagen}" width = "100px" heigth = "150px"></img>
+								
+								<div class = "row">
+									<p><b th:text = "${p.nombre}"></b></p>
+									<p><a th:text = "'(' + ${p.actor.nombre} + ')'" th:href = "@{/FichaInterprete/} + ${p.actor.id}"></a> </p>
+								</div>
+								
+								<!--<p>
+									<b th:text = "${p.nombre}"></b>
+									<a th:text = "'(' + ${p.actor.nombre} + ')'" th:href = "@{/FichaInterprete/} + ${p.actor.id}"></a>	
+								</p>-->						
+							</div>
+						</div>
+					
+					</div>
+					
+				</div>	
+			</div>
+		  </div>
+		</div>
+		
+		<div class="modal fade" id="squarespaceModal3" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+		  <div class="modal-dialog dialog-personajes">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+					<h3 class="modal-title" id="lineModalLabel">Temporadas</h3>
+				</div>
+				<div class="modal-body body-personajes">
+					
+					<div  class = "row maxWidth">
+						<ul>
+							<li th:each = "t : ${temporadas}">
+								<h4 class = "puntero" th:onclick = "'mostrar(\'' + ${t.numero} + '\');'" th:text = "'Temporada ' + ${t.numero}"></h4>
+								<table class = "table table-striped" th:id = "${t.numero}" style = "display: none;">
+									<thead>
+										<tr>
+											<th>Capitulo</th>
+											<th>Titulo</th>
+											<th>Estreno</th>
+											<th>Duracion</th>
+											<th>Descripcion</th>
+										</tr>
+										
+									</thead>
+									
+									<tbody>
+										<tr  th:each = "e : ${t.episodios}">
+											<td scope="row" th:text = "${e.numero}"></td>
+											<td th:text = "${e.titulo}"></td>
+											<td th:text = "${e.estreno}"></td>
+											<td th:text = "${e.duracion}"></td>
+											<td th:utext = "${e.descripcion}"></td>
+										</tr>
+									
+									</tbody>
+								</table>
+							</li>
+						</ul>
+					
+					</div>
+					
+				</div>	
+			</div>
+		  </div>
+		</div>
+		
+		
+			
+	</body>
+</html>
+
+<style>
+.title{
+	background-color: #4d90fe;
+	border: 0px;
+} 
+
+.header-trailer {
+	padding-bottom: 5px;
+}
+
+.stylish-input-group .input-group-addon{
+    background: white !important; 
+}
+.stylish-input-group .form-control{
+	border-right:0; 
+	box-shadow:0 0 0; 
+	border-color:#ccc;
+}
+.stylish-input-group button{
+    border:0;
+    background:transparent;
+}
+
+.dialog-trailer{
+    overflow-y: initial !important
+}
+.body-trailer{
+    height: 500px;
+    overflow-y: auto;
+}
+
+.MyButton {
+	-moz-box-shadow:inset 0px 0px 0px 0px #bbdaf7;
+	-webkit-box-shadow:inset 0px 0px 0px 0px #bbdaf7;
+	box-shadow:inset 0px 0px 0px 0px #bbdaf7;
+	background-color:#04aed9;
+	-moz-border-radius:15px;
+	-webkit-border-radius:15px;
+	border-radius:15px;
+	border:1px solid #84bbf3;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 22px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #528ecc;
+}
+.MyButton:hover {
+	background-color:#378de5;
+}
+.MyButton:active {
+	position:relative;
+	top:1px;
+}
+
+.spaceTop-25{
+	margin-top: 25px;
+}
+
+.maxWidth{
+	width : 100%;
+}
+</style>
+
+

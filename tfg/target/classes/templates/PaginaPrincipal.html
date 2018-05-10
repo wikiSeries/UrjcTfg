@@ -1,0 +1,212 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Pagina Principal</title>
+		
+		<link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />		
+		
+		<!-- Website Font style -->
+	    <link rel="stylesheet" th:href="@{/css/SeriesCookie.css}" />
+	    
+	    
+		<script type="text/javascript" src="/webjars/jquery/3.1.1/jquery.min.js"></script>    
+		<script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="/webjars/font-awesome/5.0.6/on-server/js/fontawesome-all.js"></script>
+		
+		<script type="text/javascript" th:src="@{/js/SeriesCookie.js}"></script>
+		
+		
+		
+	</head>
+	
+	<body>
+		
+		<nav class="title navbar navbar-default" role="navigation">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+					
+			    </button>
+				<p class="navbar-brand" style="color:#fff">Wiki Series</p>	
+			</div>
+			
+			<div class="collapse navbar-collapse navbar-ex1-collapse">
+			    <ul class="nav navbar-nav">
+			      <li><a style="color:#fff" href="/MisSeries">Mis Series</a></li>
+			      <li><a style="color:#fff" href="/BusquedaAvanzada">Busqueda avanzada</a></li>
+			    </ul>
+			    
+			   	<form action = "/BuscarTitulo" method = "get" class="navbar-form navbar-left" role="search">
+			      <div class="form-group">
+			        <input type="text" class="form-control" name ="titulo" placeholder="Titulo" />			    
+			        <span class="fa fa-search" style = "color: white;"></span>  
+			      </div>
+			      <!-- <button type="submit" class="btn btn-default">Buscar</button> -->
+			  	</form>
+			  	
+			  	<!--<p class="navbar-text pull-right" style="color:#fff;" th:text="'Hola ' + ${nombreUsuario}"></p>-->
+			  	
+			  	<ul class ="nav navbar-nav navbar-right">
+			  		<li class="dropdown">
+			  			<a id ="nameUser" style="color:#fff;" href="#" class="dropdown-toggle" data-toggle="dropdown" th:text="'Hola ' + ${nombreUsuario}"></a>
+			  				  
+				  		<ul class="dropdown-menu">
+				  			
+				  			<li th:if="${esAdministrador == true}">
+				  				<a href = "/SubirSerie"><i class="fas fa-cloud-upload-alt"></i> Subir Serie</a>
+				  			</li>
+				  							  			
+				  			<li>
+				  				<a href="/Perfil"><i class="fas fa-user-circle"></i> Mi perfil</a>	
+				  			</li>	
+				  			
+				  			<li>
+				  				<a href="/Logout"><i class="fas fa-power-off"></i> Cerrar sesion</a>	
+				  			</li>
+				  			
+				  		</ul>
+			  		</li>
+			  
+			  	</ul>
+			  	
+			 </div>
+			 
+		</nav>
+		
+		<div class="container">
+			
+			<div th:if = "${not #lists.isEmpty(seriesCookie)}" class = "row">
+				<h2 class="text-center">Basado en tus tendencias</h2>				
+			</div>
+			
+			<div class = "row">
+				<div id="custom_carousel" class="carousel slide" data-ride="carousel" data-interval = "5000">
+					<div class="carousel-inner">
+						<div th:each = "serieCookie, iterStat : ${seriesCookie}" th:class= "${iterStat.first} ? 'item active' : 'item'">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-md-3">
+										<a th:href="@{/InfoSerie/} + ${serieCookie.id}"><img th:src="@{${serieCookie.urlImage}}" class="img-responsive borderColor"/></a>
+									</div>
+									<div class="col-md-9 text-white">
+										<h2 th:text = "${serieCookie.titulo}"></h2>
+										<p th:utext = "${serieCookie.descripcion}"></p>
+									</div>
+								</div>
+							</div>            
+						</div> 
+					</div>
+					
+					<div class="controls">
+						<ul class = "nav">
+							<li th:each = "serieCookie, iterStat : ${seriesCookie}" data-target="#custom_carousel" th:attr = "data-slide-to = ${iterStat.index}" th:class="${iterStat.first} ? 'active'">
+								<a href="#" th:text = "${serieCookie.titulo}"></a>
+							</li>
+						
+						</ul>
+					</div>
+					
+				
+				</div>		
+			</div>
+			
+			
+			<div class = "row">
+				<div class="dropdown show">
+					<a class="btn btn-secondary dropdown-toggle bordes" href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Genero <i class="fa fa-angle-down"></i></a>
+		
+					<ul class="dropdown-menu bordes" aria-labelledby="dropdownMenuLink">
+						<li th:each = "subGeneros : ${filtroGeneros}">
+							<div th:each = "genero : ${subGeneros}" class = "col-lg-4"><a th:href="@{/Genero/} + ${genero.titulo} + @{/1} " th:text = "${genero.titulo}"></a></div>
+						</li>				
+					</ul>
+					  
+				</div>
+							
+			</div>
+			
+			<div class="row spaceTop-50" id="tablonSeries">
+				<div class="col-sm-6 col-md-4" th:each="serie : ${series}">
+					   <div class="thumbnail">
+					     <a th:href="@{/InfoSerie/} + ${serie.id}"><img th:src="@{${serie.urlImage}}" /></a>
+					     <div class="caption text-center">
+					       <h3 th:text="${serie.titulo}"></h3>
+					     </div>
+					   </div>
+				</div>
+			</div>
+			
+			<div class = "row">
+				<div class = "text-center">
+					<ul class="pagination">
+						<li th:switch = "${paginaActual}">
+							<li th:case = "1">
+								<li style = "display:none;"><a href="#">&lt;&lt;</a></li>
+								<li style = "display:none;"><a href="#">&lt;</a></li>
+							</li>
+							
+							<li th:case = "*">
+								<li><a href="/PaginaPrincipal/1">&lt;&lt;</a></li>
+								<li><a th:href="@{/PaginaPrincipal/} + ${paginaAnterior}">&lt;</a></li>
+							</li>						
+							
+							
+						</li>
+						
+						<li th:each = "i : ${indices}">
+							<li th:switch = "${paginaActual}">
+								<li th:case = "${i}" class = "active"><a th:href="@{/PaginaPrincipal/} + ${i}" th:text = "${i}"></a></li>
+								<li th:case = "*"><a th:href="@{/PaginaPrincipal/} + ${i}" th:text = "${i}"></a></li>
+							</li>				
+						
+						</li>				
+						
+						<li th:switch = "${paginaActual}">
+							<li th:case = "${indices.length}">
+								<li style = "display:none;"><a href="#">&gt;</a></li>
+								<li style = "display:none;"><a href="#">&gt;&gt;</a></li>
+							</li>
+							
+							<li th:case = "*">
+								<li><a th:href="@{/PaginaPrincipal/} + ${paginaSiguiente}">&gt;</a></li>
+								<li><a th:href="@{/PaginaPrincipal/} + ${indices.length}">&gt;&gt;</a></li>
+							</li>
+						</li>
+						
+							
+					</ul>						
+				</div>
+			</div>		  
+		</div> 			
+	</body>
+</html>
+
+<style>
+.title{
+	background-color: #4d90fe;
+	border: 0px;
+} 
+
+.link{
+    cursor: pointer;
+    background: none;
+    border:none;
+        
+	display: block;
+	padding: 3px 20px;
+	clear: both;
+	font-weight: normal;
+	line-height: 1.42857143;
+	color: #333;
+	white-space: nowrap;
+}
+
+.bordes{
+	border: 2px solid #337ab7;
+}
+
+.spaceTop-50{
+	margin-top: 50px;
+}
+
+</style>

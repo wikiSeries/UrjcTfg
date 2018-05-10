@@ -1,0 +1,21 @@
+@charset "ISO-8859-1";
+@media (min-width: 1000px)
+{
+  .dialog-personajes {
+      width: 1000px;
+  }
+}
+
+.dialog-personajes{
+    overflow-y: initial !important
+	
+}
+
+.body-personajes{
+    height: 500px;
+    overflow-y: auto;
+}
+
+.puntero{
+	cursor: pointer;
+}

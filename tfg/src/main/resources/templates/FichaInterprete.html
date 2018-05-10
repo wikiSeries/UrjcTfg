@@ -1,0 +1,151 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Ficha Interprete</title>
+		
+		<link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="/webjars/font-awesome/4.6.1/css/font-awesome.min.css" />	
+		<link rel="stylesheet" th:href="@{/css/InfoInterpreter.css}" />	
+		<link rel="stylesheet" th:href="@{/css/MyModals.css}" />
+		
+		
+		<script type="text/javascript" src="/webjars/jquery/3.1.1/jquery.min.js"></script>    
+		<script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="/webjars/font-awesome/5.0.6/on-server/js/fontawesome-all.js"></script>
+		<!--<script type="text/javascript" src="https://www.promisejs.org/polyfills/promise-done-7.0.4.min.js"></script> -->
+		<script type="text/javascript" src="/webjars/promise-polyfill/7.0.0/dist/promise.min.js"></script>    
+		<script type="text/javascript" th:src="@{/js/InfoInterpreter.js}"></script>
+		
+	</head>
+	
+	<body>
+		
+		<nav class="title navbar navbar-default" role="navigation">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+					
+			    </button>
+				<p class="navbar-brand" style="color:#fff">Wiki Series</p>	
+			</div>
+			
+			<div class="collapse navbar-collapse navbar-ex1-collapse">
+			    <ul class="nav navbar-nav">
+				  <li><a style="color:#fff" href = "/PaginaPrincipal/1">Inicio</a></li>
+			      <li><a style="color:#fff" href="/MisSeries">Mis Series</a></li>
+			      <li><a style="color:#fff" href="/BusquedaAvanzada">Busqueda avanzada</a></li>
+			    </ul>
+			    
+			   <p class="navbar-text pull-right" id = "usuarioActual" th:attr = "data-usuario = ${nombreUsuario}" style="color:#fff;" th:text="'Hola ' + ${nombreUsuario}"></p>
+			   
+			  	
+			 </div>
+			 
+		</nav>
+		
+		<div class="container">
+			
+			<div class = "row">
+			
+				<div class = "col-lg-2">
+					<img class = "img-responsive" th:src = "${urlImagenInterprete}" ></img>
+					
+					<div>
+						<p id = "nameInterpreter" th:attr = "data-name = ${nameInterpreter}"><b>Nombre:</b><span th:text = "${nameInterpreter}"></span></p>
+						<p><b>Nacionalidad:</b> <span th:text = "${countryInterpreter}"></span></p>
+						<p><b>Nacimiento:</b> <span th:text = "${birthdayInterpreter}"></span></p>
+						<p><b>Fallecimiento:</b> <span th:text = "${deathdayInterpreter}"></span></p>
+						
+						<div>
+							<button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary maxWidth">Series</button>
+						</div>
+						
+						
+					</div>
+							
+				</div>
+				
+				<div class = "col-lg-8 noStyles" id = "tablonInfoInterpreter">
+					
+					<div class = "text-center">
+						
+						<i id = "iconLoading" class="fas fa-spinner fa-spin" style="font-size:50px"></i>
+					
+					</div>
+				
+				</div>
+			
+			</div>			
+			 
+		</div> 	
+		
+		<div class="modal fade" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+		  <div class="modal-dialog dialog-personajes">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+					<h3 class="modal-title" id="lineModalLabel">Series</h3>
+				</div>
+				<div class="modal-body body-personajes">
+					
+					<div  class = "row maxWidth">
+						<div th:each = "filaSeries : ${series}" class = "row">
+							<div th:each = "s : ${filaSeries}" class = "col-lg-2 text-center">
+								<a th:href = "@{/InfoSerie/} + ${s.id}"><img th:src = "${s.urlImage}" width = "100px" heigth = "150px"></img></a>
+								
+								<div class = "row">
+									<p><b th:text = "${s.titulo}"></b></p>
+								</div>
+												
+							</div>
+						</div>
+					
+					</div>
+					
+				</div>	
+			</div>
+		  </div>
+		</div>
+				
+	</body>
+</html>
+
+<style>
+.title{
+	background-color: #4d90fe;
+	border: 0px;
+} 
+
+.link{
+    cursor: pointer;
+    background: none;
+    border:none;
+        
+	display: block;
+	padding: 3px 20px;
+	clear: both;
+	font-weight: normal;
+	line-height: 1.42857143;
+	color: #333;
+	white-space: nowrap;
+}
+
+.bordes{
+	border: 2px solid #337ab7;
+}
+
+.spaceTop-50{
+	margin-top: 50px;
+}
+
+.maxWidth{
+	width : 100%;
+}
+
+</style>
+<script>
+
+	var name = $("#nameInterpreter").attr("data-name");
+	var info = TFG.InfoInterpreter(name);
+
+</script>

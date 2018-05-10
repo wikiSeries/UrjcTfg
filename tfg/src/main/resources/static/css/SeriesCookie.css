@@ -1,0 +1,44 @@
+@charset "ISO-8859-1";
+
+#custom_carousel .item {
+
+    color:#000;
+    background:linear-gradient(to bottom, #378de5 , white);
+    padding:20px 0;
+}
+#custom_carousel .controls{
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding:0;
+    margin:0;
+    white-space: nowrap;
+    text-align: center;
+    position: relative;
+    background:white;
+}
+#custom_carousel .controls li {
+    display: table-cell;
+    width: 1%;
+    max-width:90px
+}
+#custom_carousel .controls li.active {
+    background-color:#94C2F2;
+    border-top:3px solid #378de5;
+}
+#custom_carousel .controls a small {
+    overflow:hidden;
+    display:block;
+    font-size:10px;
+    margin-top:5px;
+    font-weight:bold
+}
+
+#custom_carousel .controls a:hover{
+    background-color:#94C2F2;
+
+}
+
+.borderColor{
+	border: 5px solid white;
+}
+

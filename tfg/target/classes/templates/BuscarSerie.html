@@ -1,0 +1,124 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Subir serie</title>
+		
+		<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+		<!-- Website Font style -->
+	    <link rel="stylesheet" href="/webjars/font-awesome/4.6.1/css/font-awesome.min.css" />
+	    
+		<script type="text/javascript" src="/webjars/jquery/3.1.1/jquery.min.js"></script>    
+		<script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="/webjars/bootbox/4.4.0/bootbox.js"></script>
+		<script type="text/javascript" src="/webjars/font-awesome/5.0.6/on-server/js/fontawesome-all.js"></script>
+		
+		<script type="text/javascript" th:src="@{/js/TvmazeApi.js}"></script>
+		
+	</head>
+	
+	<body>
+		
+		<nav class="title navbar navbar-default" role="navigation">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+					
+			    </button>
+				<a class="navbar-brand" style="color:#fff" href="#">Wiki Series</a>	
+			</div>
+			
+			<div class="collapse navbar-collapse navbar-ex1-collapse">
+			    <ul class="nav navbar-nav">
+			      <li><a style="color:#fff" href = "/PaginaPrincipal/1">Inicio</a></li>
+			    </ul>
+			  	
+			  	<p class="navbar-text pull-right" style="color:#fff;" th:text="'Hola ' + ${nombreUsuario}"></p>
+			  	
+			 </div>
+			 
+		</nav>
+		
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div id="imaginary_container"> 
+		                <div class="input-group stylish-input-group">
+		                    <input id="tituloSerie" type="text" class="form-control"  placeholder="Introduce el titulo de la serie" />
+		                    <span class="input-group-addon">
+		                        <button type="submit"  onclick="buscarListaSeries()">
+		                        	<span class="fa fa-search"></span>
+		                        </button>
+		                    </span>
+		                </div>
+            		</div>
+				</div>
+			</div>
+			
+			<div class="row" id ="tablonResultados">
+				
+			</div>
+		</div>
+	</body>
+</html>
+
+<style>
+.title{
+	background-color: #4d90fe;
+	border: 0px;
+} 
+
+.stylish-input-group .input-group-addon{
+    background: white !important; 
+}
+.stylish-input-group .form-control{
+	border-right:0; 
+	box-shadow:0 0 0; 
+	border-color:#ccc;
+}
+.stylish-input-group button{
+    border:0;
+    background:transparent;
+}
+
+.spaceTop-5{
+	margin-top: 5px;
+
+}
+.spaceTop-25{
+	margin-top: 25px;
+}
+
+
+
+.ocultar{
+	display: none;
+}
+
+.MyButton {
+	-moz-box-shadow:inset 0px 0px 0px 0px #bbdaf7;
+	-webkit-box-shadow:inset 0px 0px 0px 0px #bbdaf7;
+	box-shadow:inset 0px 0px 0px 0px #bbdaf7;
+	background-color:#04aed9;
+	-moz-border-radius:15px;
+	-webkit-border-radius:15px;
+	border-radius:15px;
+	border:1px solid #84bbf3;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 22px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #528ecc;
+}
+.MyButton:hover {
+	background-color:#378de5;
+}
+.MyButton:active {
+	position:relative;
+	top:1px;
+}
+
+
+</style>

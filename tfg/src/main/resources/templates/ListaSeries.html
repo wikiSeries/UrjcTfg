@@ -1,0 +1,313 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Mis series</title>
+		
+		<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+		<!-- Website Font style -->
+	    <link rel="stylesheet" href="/webjars/font-awesome/4.6.1/css/font-awesome.min.css" />
+	    <link rel="stylesheet" th:href="@{/css/ListaSeries.css}" />
+	   	<link rel="stylesheet" th:href="@{/css/MyModals.css}" />
+	    
+	    
+	    
+		<script type="text/javascript" src="/webjars/jquery/3.1.1/jquery.min.js"></script>    
+		<script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script type="text/javascript" th:src="@{/js/FiltroLista.js}"></script>
+		<script type="text/javascript" th:src="@{/js/CargarFichaSerie.js}"></script>
+		<script src="/webjars/bootbox/4.4.0/bootbox.js"></script>
+		
+	</head>
+	
+	<body>
+		
+		<nav class="title navbar navbar-default" role="navigation">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+					
+			    </button>
+				<p class="navbar-brand" style="color:#fff">Wiki Series</p>	
+			</div>
+			
+			<div class="collapse navbar-collapse navbar-ex1-collapse">
+			    <ul class="nav navbar-nav">
+				  <li><a style="color:#fff" href = "/PaginaPrincipal/1">Inicio</a></li>
+			      <li><a style="color:#fff" href="/BusquedaAvanzada">Busqueda avanzada</a></li>
+			    </ul>
+			    			  	
+			  	<p class="navbar-text pull-right" id = "usuarioActual" th:attr = "data-usuario = ${nombreUsuario}" style="color:#fff;" th:text="'Hola ' + ${nombreUsuario}"></p>
+			  	
+			  	
+			 </div>
+			 
+		</nav>
+		
+		<div class="container">
+			
+			<div class = "row">
+			
+				<div class="board">
+					<div class="board-inner">
+						<ul class="nav nav-tabs" id="myTab">
+		
+							<li class="active">
+		
+								<a href="#todas" data-toggle="tab" title="Todas" aria-expanded="false">
+									<span class="round-tabs two">
+										<i class="glyphicon glyphicon-list tabsIcon"></i>
+									</span>
+								</a>
+		
+							</li>
+		
+		
+		
+							<li class="">
+		
+								<a href="#vistas" data-toggle="tab" title="vistas" aria-expanded="false">
+									<span class="round-tabs two">
+										<i class="glyphicon glyphicon-eye-open tabsIcon"></i>
+									</span>
+								</a>
+		
+							</li>
+		
+							<li class="">
+		
+								<a href="#pendientes" data-toggle="tab" title="Pendientes" aria-expanded="true">
+									<span class="round-tabs three">
+									<i class="glyphicon glyphicon-eye-close	tabsIcon"></i>
+									</span>
+								</a>
+		
+							</li>
+		
+						</ul>
+					</div>
+					<div class="tab-content">
+						<div class="tab-pane fade active in" id="todas">
+							<div class = "rowTable">
+								<div class="col-lg-12">
+									<div class="panel panel-primary">
+										<div class="panel-heading">
+											<h3 class="panel-title">Todas</h3>
+											<div class="pull-right">
+												<span class="clickable filter" data-toggle="tooltip" title="Filtro" data-container="body">
+													<i class="glyphicon glyphicon-filter"></i>
+												</span>
+											</div>
+
+										</div>
+
+										<div class="panel-body">
+											<input type="text" class="form-control" id="dev-table-filter" data-action="filter" data-filters="#dev-table" placeholder="Filtro" />
+										</div>
+										
+										<div class = "table-responsive">
+											<table class="table table-hover" id="dev-table">
+												<tbody>
+												
+													<tr th:each = "serie : ${series}">
+														<td class = "col-lg-2">
+															<img class = "tablaImagen" th:src ="@{${serie.urlImage}}"></img>
+														</td>
+														
+														<td class = "col-lg-6">
+															<h1 th:text = "${serie.titulo}"></h1>
+															<div th:id = "'serie' + ${serie.id}" style = "display: none;" >
+																<p th:utext = "${serie.descripcion}"></p>
+															
+															</div>
+														</td>
+														
+														<td class="col-lg-2">
+															<button class="btn btn-info btn-xs pull-right" th:onclick = "'mostrar(\'serie' + ${serie.id} + '\');'" title = "Informacion serie">
+																<span class="glyphicon glyphicon-info-sign"></span> Info
+															</button>
+												
+														</td>
+														
+														<td class = "col-lg-2">
+															<button class="btn btn-danger btn-xs" th:onclick = "'eliminarSerieLista(\'' + ${serie.titulo.replaceAll(&quot;\'&quot;, &quot;\\'&quot;)} + '\',\'' +  ${serie.id} + '\',\'' + ${nombreUsuario} + '\');'" >
+																<span class="glyphicon glyphicon-remove"></span> Eli
+															</button>
+														</td>
+														
+													</tr>
+	
+												</tbody>
+											</table>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="tab-pane fade" id="vistas">
+							<div class = "rowTable">
+								<div class="col-lg-12">
+									<div class="panel panel-primary">
+										<div class="panel-heading">
+											<h3 class="panel-title">Vistas</h3>
+											<div class="pull-right">
+												<span class="clickable filter" data-toggle="tooltip" title="Filtro" data-container="body">
+													<i class="glyphicon glyphicon-filter"></i>
+												</span>
+											</div>
+
+										</div>
+
+										<div class="panel-body">
+											<input type="text" class="form-control" id="dev-table-filterV" data-action="filter" data-filters="#dev-tableV" placeholder="Filtro" />
+										</div>
+										
+										<div class = "table-responsive">
+											<table class="table table-hover" id="dev-tableV">
+												<tbody>
+													
+													<tr th:each = "e : ${vistos}" th:id = "${e.id} + 'E'">
+														
+															
+														<td class = "col-lg-2">
+															<img class = "tablaImagen" th:src ="@{${e.temporada.serie.urlImage}}"></img>
+														</td>
+														
+														<td class = "col-lg-6">
+															<h1 th:text = "${e.temporada.serie.titulo}"></h1>
+															<p th:text = "'T' + ${e.temporada.numero} + 'E' + ${e.numero}"></p>
+															<p th:text = "${e.titulo}"></p>
+															<div th:id = "${e.id}" style = "display: none;" >
+																<p th:utext = "${e.descripcion}"></p>
+															</div>
+															
+														</td>
+														
+														
+														<td class = "col-lg-2">
+															<button th:id = "${e.id} + 'Mover'" class="btn btn-danger btn-xs pull-right" th:onclick = "'marcarEpisodio(\'Pendiente\',\'' +  ${e.id} + '\',\'' + ${nombreUsuario} + '\');'" title = "Marcar como pendiente">
+																<span class="glyphicon glyphicon-eye-close"></span> Pendiente
+															</button>
+														</td>
+														
+														<td class = "col-lg-2">
+															<button class="btn btn-info btn-xs" th:onclick = "'mostrar(\'' + ${e.id} + '\');'" title = "Informacion episodio">
+																<span class="glyphicon glyphicon-info-sign"></span> Info
+															</button>
+														</td>
+																	
+														
+													</tr>
+	
+												</tbody>
+											</table>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="tab-pane fade" id="pendientes">
+							<div class = "rowTable">
+								<div class="col-lg-12">
+									<div class="panel panel-primary">
+										<div class="panel-heading">
+											<h3 class="panel-title">Pendientes</h3>
+											<div class="pull-right">
+												<span class="clickable filter" data-toggle="tooltip" title="Filtro" data-container="body">
+													<i class="glyphicon glyphicon-filter"></i>
+												</span>
+											</div>
+
+										</div>
+
+										<div class="panel-body">
+											<input type="text" class="form-control" id="dev-table-filterP" data-action="filter" data-filters="#dev-tableP" placeholder="Filtro" />
+										</div>
+										
+										<div class = "table-responsive">
+											<table class="table table-hover" id="dev-tableP">
+												<tbody>
+													
+													<tr th:each = "e : ${pendientes}" th:id = "${e.id} + 'E'">
+														
+															
+														<td class = "col-lg-2">
+															<img class = "tablaImagen" th:src ="@{${e.temporada.serie.urlImage}}"></img>
+														</td>
+														
+														<td class = "col-lg-6">
+															<h1 th:text = "${e.temporada.serie.titulo}"></h1>
+															<p th:text = "'T' + ${e.temporada.numero} + 'E' + ${e.numero}"></p>
+															<p th:text = "${e.titulo}"></p>
+															<div th:id = "${e.id}" style = "display: none;" >
+																<p th:utext = "${e.descripcion}"></p>
+															</div>
+															
+														</td>
+														
+														
+														<td class = "col-lg-2">
+															<button th:id = "${e.id} + 'Mover'" class="btn btn-success btn-xs pull-right" th:onclick = "'marcarEpisodio(\'Visto\',\'' +  ${e.id} + '\',\'' + ${nombreUsuario} + '\');'" title = "Marcar como visto">
+																<span class="glyphicon glyphicon-eye-open"></span> Visto
+															</button>
+														</td>
+														
+														<td class = "col-lg-2">
+															<button class="btn btn-info btn-xs" th:onclick = "'mostrar(\'' + ${e.id} + '\');'" title = "Informacion episodio">
+																<span class="glyphicon glyphicon-info-sign"></span> Info
+															</button>
+														</td>
+																		
+													</tr>
+	
+												</tbody>
+											</table>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+			</div>
+		</div> 
+				
+	</body>
+</html>
+
+<style>
+.title{
+	background-color: #4d90fe;
+	border: 0px;
+} 
+
+.link{
+    cursor: pointer;
+    background: none;
+    border:none;
+        
+	display: block;
+	padding: 3px 20px;
+	clear: both;
+	font-weight: normal;
+	line-height: 1.42857143;
+	color: #333;
+	white-space: nowrap;
+}
+
+.bordes{
+	border: 2px solid #337ab7;
+}
+
+.spaceTop-50{
+	margin-top: 50px;
+}
+
+</style>

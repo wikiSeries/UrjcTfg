@@ -1,0 +1,245 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Perfil</title>
+		
+		<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+		<!-- Website Font style -->
+	    <link rel="stylesheet" href="/webjars/font-awesome/4.6.1/css/font-awesome.min.css" />	
+	    <link rel="stylesheet" th:href="@{/css/PasswordStrength.css}" />
+	        
+	    
+		<script type="text/javascript" src="/webjars/jquery/3.1.1/jquery.min.js"></script>    
+		<script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>		
+		<script type="text/javascript" src="/webjars/font-awesome/5.0.6/on-server/js/fontawesome-all.js"></script>
+		<script type="text/javascript" th:src="@{/js/CargarFichaSerie.js}"></script>
+		<script type="text/javascript" th:src="@{/js/PasswordStrength.js}"></script>
+		
+		
+	</head>
+	
+	<body>
+		
+		<nav class="title navbar navbar-default" role="navigation">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+					
+			    </button>
+				<p class="navbar-brand" style="color:#fff">Wiki Series</p>	
+			</div>
+			
+			<div class="collapse navbar-collapse navbar-ex1-collapse">
+			    <ul class="nav navbar-nav">
+				  <li><a style="color:#fff" href = "/PaginaPrincipal/1">Inicio</a></li>
+			      <li><a style="color:#fff" href="/MisSeries">Mis Series</a></li>
+			      <li><a style="color:#fff" href="/BusquedaAvanzada">Busqueda avanzada</a></li>
+			    </ul>
+			  			  	
+			  	<ul class ="nav navbar-nav navbar-right">
+			  		<li class="dropdown">
+			  			<a id ="nameUser" style="color:#fff;" href="#" class="dropdown-toggle" data-toggle="dropdown" th:text="'Hola ' + ${nombreUsuario}"></a>
+			  		</li>			  
+			  	</ul>
+			  	
+			 </div>
+			 
+		</nav>
+		
+		<div class="container">
+
+			<div class = "row">
+			
+				<div class="panel panel-Primary">
+					<div class="panel-heading">  
+						<h4>Perfil de usuario</h4>
+					</div>
+					
+					<div class="panel-body">
+						<div class="col-md-4 col-xs-12 col-sm-6 col-lg-4">
+							<img th:src="@{/Images/user.png}" id="imgUser" class="img-circle img-responsive" /> 
+						</div>
+						
+						<div class="col-md-8 col-xs-12 col-sm-6 col-lg-8" >
+							<div class="row" >
+								<h2 th:text = "${nombre}"></h2>
+								<p>Tipo de usuario: <b th:text = "${tipoUsuario}"></b></p>
+								<p th:if = "${cambiarPasswordOk != null}" style = "color: green;"><i class = "glyphicon glyphicon-ok"></i> <span th:text = "${cambiarPasswordOk}"></span></p>
+								<p th:if = "${cambiarCorreoOk != null}" style = "color: green;"><i class = "glyphicon glyphicon-ok"></i> <span th:text = "${cambiarCorreoOk}"></span></p>
+															
+							</div>
+							
+							<hr></hr>
+							<div class = "row">
+								<ul class="details" >
+									<li><p><span class="fas fa-user" style = "width:50px;"></span> <span th:text = "${nombreUsuario}"></span></p></li>
+									<li><p><span class="fas fa-lock" style = "width:50px;"></span>Contraseña: ****** <a class = "pull-right" href = "#cambiarPassword" data-toggle = "tab">Cambiar Contraseña</a></p></li>
+									<li><p><span class="fas fa-envelope" style="width:50px;"></span> <span th:text = "${correo}"></span><a class = "pull-right" href = "#cambiarCorreo" data-toggle = "tab">Cambiar correo</a></p></li>
+								</ul>
+							</div>
+							<hr></hr>
+							
+							<div class = "row">
+								<div class="col-sm-5 col-xs-6 tital">
+									<p>Fecha de registro: <span th:text = "${fechaRegistro}"></span></p>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			
+			</div>
+			
+			<div class = "tab-content">
+				<div th:class = "${errorPasswordConfirm != null or errorPasswordActual != null} ? 'row tab-pane fade in active' : 'row tab-pane fade'" id = "cambiarPassword">
+					<div class = "panel panel-Primary">
+						<div class ="panel-heading">
+							<h4>Cambiar contraseña</h4>
+						</div>
+						<div class = "panel-body">
+						
+							<form action = "/CambiarPassword" method = "post">
+								<div class = "row">
+									<div class="col-md-4 col-xs-12 col-sm-6 col-lg-4">
+										<img  th:src="@{/Images/lock.png}" id="imgLock" class="img-circle img-responsive" /> 
+									</div>
+									
+									<div class="col-lg-4">
+						
+										<div class="form-group">
+											<p th:if = "${errorPasswordActual != null}" style = "color: red;"><i class = "glyphicon glyphicon-remove"></i> <span th:text = "${errorPasswordActual}"></span></p>
+											<p th:if = "${errorPasswordConfirm != null}" style = "color: red;"><i class = "glyphicon glyphicon-remove"></i> <span th:text = "${errorPasswordConfirm}"></span></p>											
+											
+											<label class="cols-sm-2 control-label">*Contraseña actual</label>
+											<div class="cols-sm-10">
+												<div class="input-group">
+													<span class="input-group-addon"><i class="glyphicon glyphicon-lock" aria-hidden="true"></i></span>
+													<input type="password" class="form-control" name="currentPassword" id="currentPassword"  placeholder="Introduce la contraseña actual" th:required = "required" minlength="8" title="Contraseña con longitud minima de 8 caracteres" />
+												</div>
+											</div>
+										</div>
+										
+										<div class="form-group">
+											<label class="cols-sm-2 control-label">*Nueva contraseña</label>
+											<div class="cols-sm-10">
+												<div class="input-group">
+													<span class="input-group-addon"><i class="glyphicon glyphicon-lock" aria-hidden="true"></i></span>
+													<input type="password" class="form-control" name="newPassword" id="password"  placeholder="Introduce la nueva contraseña" th:required = "required" minlength="8" title="Contraseña con longitud minima de 8 caracteres" />
+												</div>
+											</div>
+										</div>
+										
+										<div class="form-group">
+											<label class="cols-sm-2 control-label">*Confirmar contraseña</label>
+											<div class="cols-sm-10">
+												<div class="input-group">
+													<span class="input-group-addon"><i class="glyphicon glyphicon-lock" aria-hidden="true"></i></span>
+													<input type="password" class="form-control" name="confirmPassword" id="confirmPassword"  placeholder="Confirmar la nueva contraseña" th:required = "required" minlength="8" title="Contraseña con longitud minima de 8 caracteres" />
+												</div>
+											</div>
+										</div>
+										
+										<div class="form-group ">
+											<input type="submit" name="Cambiar" value="Cambiar" id="cambiar" class="btn btn-primary btn-lg btn-block login-button"/>
+											<a id="cancelar" class="btn btn-danger btn-lg btn-block login-button" onclick = "cancelar('cambiarPassword');">Cancelar</a>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				
+				<div th:class = "${errorPasswordCorreo != null or errorNuevoCorreo != null} ? 'row tab-pane fade in active' : 'row tab-pane fade'" id = "cambiarCorreo">
+					<div class = "panel panel-Primary">
+						<div class = "panel-heading">
+							<h4>Cambiar correo</h4>
+						</div>
+						
+						<div class = "panel-body">
+							<form action = "/CambiarCorreo" method = "post">
+							
+								<div class = "row">
+									<div class="col-md-4 col-xs-12 col-sm-6 col-lg-4">
+										<img th:src="@{/Images/mail.png}" id="imgMail" class="img-circle img-responsive" /> 
+									</div>
+									
+									<div class="col-lg-4">
+									
+										<div class="form-group">
+											<p th:if = "${errorNuevoCorreo != null}" style = "color: red;"><i class = "glyphicon glyphicon-remove"></i> <span th:text = "${errorNuevoCorreo}"></span></p>
+											<p th:if = "${errorPasswordCorreo != null}" style = "color: red;"><i class = "glyphicon glyphicon-remove"></i> <span th:text = "${errorPasswordCorreo}"></span></p>
+
+											<label class="cols-sm-2 control-label">*Nuevo correo</label>
+											<div class="cols-sm-10">
+												<div class="input-group">
+													<span class="input-group-addon"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i></span>
+													<input type="text" class="form-control" name="email" id="email" th:required = "required" placeholder="Introduce el nuevo correo" />
+												</div>
+											</div>
+										</div>
+										
+										<div class="form-group">
+											<label class="cols-sm-2 control-label">*Contraseña actual</label>
+											<div class="cols-sm-10">
+												<div class="input-group">
+													<span class="input-group-addon"><i class="glyphicon glyphicon-lock" aria-hidden="true"></i></span>
+													<input type="password" class="form-control" name="currentPassword" id="currentPassword"  th:required = "required" placeholder="Introduce la contraseña actual" />
+												</div>
+											</div>
+										</div>
+										
+										<div class="form-group ">
+											<input type="submit" name="Cambiar" value="Cambiar" id="cambiar" class="btn btn-primary btn-lg btn-block login-button"/>
+											<a href="#" class="btn btn-danger btn-lg btn-block login-button" onclick = "cancelar('cambiarCorreo');">Cancelar</a>
+										</div>
+									</div>
+								</div>
+							
+							</form>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			
+		</div> 			
+	</body>
+</html>
+
+<style>
+.title{
+	background-color: #4d90fe;
+	border: 0px;
+} 
+
+.link{
+    cursor: pointer;
+    background: none;
+    border:none;
+        
+	display: block;
+	padding: 3px 20px;
+	clear: both;
+	font-weight: normal;
+	line-height: 1.42857143;
+	color: #333;
+	white-space: nowrap;
+}
+
+.bordes{
+	border: 2px solid #337ab7;
+}
+
+.spaceTop-50{
+	margin-top: 50px;
+}
+
+</style>
+<script>
+$(document).ready(function () {
+    var obj = $('#password').passwordStrength();
+});
+
+</script>

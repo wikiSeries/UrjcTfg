@@ -24,5 +24,5 @@ public interface RepositorioSeries extends JpaRepository<Serie, Long> {
 	public List<String> getAnos();
 	
 	public List<Serie> findByIdIn(List<Long> listaIds);
-	public List<Serie> findDistinctTop5ByGenerosIn(List<Genero> generos);
+	public List<Serie> findDistinctByGenerosIn(List<Genero> generos, Pageable page);
 }

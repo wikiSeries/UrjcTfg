@@ -382,7 +382,9 @@ public class NavegacionController {
 		List<Serie> seriesCookiesNoRepeat = repositorioSeries.findByIdIn(idSeriesCookieNoRepeat);
 
 		List<Genero> generosSeriesCookies = Utilidades.getGenerosSeriesCookies(seriesCookiesNoRepeat);
-		return repositorioSeries.findDistinctTop5ByGenerosIn(generosSeriesCookies);
+		PageRequest pageRequest = new PageRequest(0, Constantes.NUMERO_IDSERIE_COOKIE, Sort.Direction.ASC, "puntuacionMediaEstrella");
+		List<Serie> series = repositorioSeries.findDistinctByGenerosIn(generosSeriesCookies, pageRequest);
+		return series;
 	}
 
 	

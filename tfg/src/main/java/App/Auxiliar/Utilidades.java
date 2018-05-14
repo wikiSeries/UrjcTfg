@@ -2,7 +2,6 @@ package App.Auxiliar;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
@@ -14,8 +13,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,7 +26,8 @@ public class Utilidades {
 	
 	
 	public static final List<Long> getIdSeriesNoRepeat(String idSeries){
-		String [] idSeriesSplit = idSeries.split(",");
+		String idSeriesDec = getTextDecoded(idSeries);
+		String [] idSeriesSplit = idSeriesDec.split(",");
 		List<Long> noRepeat = new ArrayList<Long>();
 		
 		for(String id : idSeriesSplit){
@@ -41,21 +39,6 @@ public class Utilidades {
 		return noRepeat;
 	}
 	
-	public static final String parseToValueCookie(List<Serie> series) {
-		String newValueCookie = new String();
-		for(Serie serie : series) {
-			if(newValueCookie.isEmpty()) {
-				newValueCookie = serie.getId().toString();
-			}
-			else {
-				newValueCookie = String.format("%s,%s", serie.getId().toString(), newValueCookie);
-
-			}
-		}
-		
-		
-		return newValueCookie;
-	}
 	
 	public static final List<Genero> getGenerosSeriesCookies(List<Serie> seriesCookies){
 		List<Genero> generos = new ArrayList<Genero>();
@@ -104,19 +87,6 @@ public class Utilidades {
 	}
 	
 	public static final boolean validarFormatoCorreo(String correo){
-		/*boolean esValido = false;
-		try {
-			InternetAddress internetAddress = new InternetAddress(correo);
-			internetAddress.validate();
-			esValido = true;
-		}
-		catch(AddressException ex) {
-			System.out.println(ex.getMessage());
-			esValido = false;
-		}
-		
-		return esValido;
-		*/
 		
 		Matcher matcher = Constantes.VALID_EMAIL_ADDRESS_REGEX.matcher(correo);
         return matcher.find();
@@ -147,11 +117,12 @@ public class Utilidades {
 	}
 
 	public static final Cookie getCookie(HttpServletRequest httpRequest, String nombreCookie) {
+		String nombreCookieCod = getTextEncoded(nombreCookie);
 		Cookie [] cookies = httpRequest.getCookies();
 		Cookie cookie = null;
 		if(cookies != null) {
 			for(Cookie c : cookies) {
-				if(c.getName().equals(nombreCookie)) {
+				if(c.getName().equals(nombreCookieCod)) {
 					cookie = c;
 					break;
 				}
@@ -173,13 +144,17 @@ public class Utilidades {
 		}
 		
 		newValueCookie = String.format("%s,%s", extensionCookie, newValueCookie);
-		cookie.setValue(newValueCookie);
+		String newValueCookieCod = getTextEncoded(newValueCookie);
+		cookie.setValue(newValueCookieCod);
 		cookie.setMaxAge(Constantes.TIEMPO_COOKIE_SERIE_USUARIO);
 		cookie.setPath("/");
 	}
 
 	public static final Cookie crearCookie(String clave, String valor) {
-		Cookie cookie = new Cookie(clave, valor);
+		String claveCod = getTextEncoded(clave);
+		String valorCod = getTextEncoded(valor);
+		
+		Cookie cookie = new Cookie(claveCod, valorCod);
 		cookie.setMaxAge(Constantes.TIEMPO_COOKIE_SERIE_USUARIO);
 		cookie.setPath("/");
 		
@@ -187,7 +162,7 @@ public class Utilidades {
 	}
 	
 	public static final String getTextEncoded(String text) {
-		return Base64.getEncoder().encodeToString(text.getBytes());		
+		return Base64.getEncoder().withoutPadding().encodeToString(text.getBytes());		
 	}
 	
 	public static final String getTextDecoded(String textEncoded) {

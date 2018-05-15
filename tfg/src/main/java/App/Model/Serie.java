@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import App.Auxiliar.Constantes;
 import App.Model.TvMaze.SerieApi;
 
 @Entity
@@ -27,7 +28,7 @@ public class Serie {
 		
 	private String titulo;
 	
-	@Column(columnDefinition = "VARCHAR(1024)")
+	@Column(columnDefinition = "TEXT")
 	private String descripcion;
 	private String urlImage;
 	private String idVideo;
@@ -41,23 +42,24 @@ public class Serie {
 	private String idioma;
 	private String estado;
 	
-	@JsonIgnore
 	@ManyToMany(mappedBy="series")
 	private List<Genero> generos;
 	
-	@JsonIgnore
+	
 	@OneToMany(mappedBy="serie")
 	private List<Comentario> comentarios;
 	
-	@JsonIgnore
+	
 	@ManyToMany(mappedBy = "series")
 	private List<Actor> actores;
 	
-	@JsonIgnore
+	
 	@OneToMany(mappedBy  = "serie")
 	private List<Temporada> temporadas;
 	
-	@JsonIgnore
+	@OneToMany(mappedBy = "serie")
+	private List<Personaje> personajes;
+	
 	@ManyToMany
 	private List<Usuario> usuarios;
 	
@@ -76,12 +78,14 @@ public class Serie {
 		
 		this.idApi = idApi;
 		this.titulo = titulo;
-		this.descripcion = descripcion;
+		
+		this.descripcion = descripcion.length() > Constantes.NUMERO_LIMITE_COLUMNA_TEXTO ? descripcion.substring(0, Constantes.NUMERO_LIMITE_COLUMNA_TEXTO - Constantes.FINAL_PARRAFO.length()) + Constantes.FINAL_PARRAFO : descripcion;
 		this.fechaEstreno = fechaEstreno;
 		this.puntuacion = puntuacion;
 		this.urlImage = urlImage;
 		this.generos = new ArrayList<Genero>();
 		this.actores = new ArrayList<Actor>();
+		this.personajes = new ArrayList<Personaje>();
 		this.puntuaciones = new HashMap<Long, Integer>();
 		this.usuarios = new ArrayList<Usuario>();
 		
@@ -91,7 +95,7 @@ public class Serie {
 	public Serie(SerieApi serieApi) {
 		this.idApi = serieApi.getId();
 		this.titulo = serieApi.getName();
-		this.descripcion = serieApi.getSummary();
+		this.descripcion = serieApi.getSummary().length() > Constantes.NUMERO_LIMITE_COLUMNA_TEXTO ? serieApi.getSummary().substring(0, Constantes.NUMERO_LIMITE_COLUMNA_TEXTO - Constantes.FINAL_PARRAFO.length()) + Constantes.FINAL_PARRAFO : serieApi.getSummary();
 		this.fechaEstreno = serieApi.getPremiered();
 		this.puntuacion = serieApi.getRating() != null ? serieApi.getRating().getAverage() : 0; 
 		
@@ -110,6 +114,7 @@ public class Serie {
 		
 		this.generos = new ArrayList<Genero>();
 		this.actores = new ArrayList<Actor>();
+		this.personajes = new ArrayList<Personaje>();
 		this.puntuaciones = new HashMap<Long, Integer>();
 		this.usuarios = new ArrayList<Usuario>();
 	}
@@ -279,8 +284,14 @@ public class Serie {
 		this.puntuacionMediaEstrella = puntuacionMediaEstrella;
 	}
 	
-	
-	
+	public List<Personaje> getPersonajes() {
+		return personajes;
+	}
+
+	public void setPersonajes(List<Personaje> personajes) {
+		this.personajes = personajes;
+	}
+
 	public List<Usuario> getUsuarios() {
 		return usuarios;
 	}
@@ -292,7 +303,9 @@ public class Serie {
 	public void actualizar(SerieApi serieApi) {
 		this.setIdApi(serieApi.getId());
 		this.setTitulo(serieApi.getName());
-		this.setDescripcion(serieApi.getSummary());
+		
+		String descripcion = serieApi.getSummary().length() > Constantes.NUMERO_LIMITE_COLUMNA_TEXTO ? serieApi.getSummary().substring(0, Constantes.NUMERO_LIMITE_COLUMNA_TEXTO - Constantes.FINAL_PARRAFO.length()) + Constantes.FINAL_PARRAFO : serieApi.getSummary();
+		this.setDescripcion(descripcion);
 		this.setFechaEstreno(serieApi.getPremiered());
 		
 		double puntuacion = serieApi.getRating() != null ? serieApi.getRating().getAverage() : 0;

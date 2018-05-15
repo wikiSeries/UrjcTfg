@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import App.Auxiliar.Constantes;
+
 @Entity
 public class Episodio {
 
@@ -27,7 +29,7 @@ public class Episodio {
 	private String estreno;
 	private int duracion;
 	
-	@Column(columnDefinition = "VARCHAR(1024)")
+	@Column(columnDefinition = "TEXT")
 	private String descripcion;
 	
 	@ManyToOne
@@ -53,7 +55,7 @@ public class Episodio {
 		this.numero = numero;
 		this.estreno = estreno;
 		this.duracion = duracion;
-		this.descripcion = descripcion;
+		this.descripcion = descripcion.length() > Constantes.NUMERO_LIMITE_COLUMNA_TEXTO ? descripcion.substring(0, Constantes.NUMERO_LIMITE_COLUMNA_TEXTO - Constantes.FINAL_PARRAFO.length()) + Constantes.FINAL_PARRAFO : descripcion;
 		
 		this.temporada = new Temporada();
 		this.usuarios = new ArrayList<Usuario>();
@@ -66,7 +68,7 @@ public class Episodio {
 		this.numero = episodioApi.getNumber();
 		this.estreno = episodioApi.getAirdate();
 		this.duracion = episodioApi.getRuntime();
-		this.descripcion = episodioApi.getSummary();
+		this.descripcion = episodioApi.getSummary().length() > Constantes.NUMERO_LIMITE_COLUMNA_TEXTO ? episodioApi.getSummary().substring(0,  Constantes.NUMERO_LIMITE_COLUMNA_TEXTO - Constantes.FINAL_PARRAFO.length()) + Constantes.FINAL_PARRAFO : episodioApi.getSummary();
 		
 		this.temporada = new Temporada();
 	}
@@ -161,7 +163,8 @@ public class Episodio {
 		this.setNumero(episodioApi.getNumber());
 		this.setEstreno(episodioApi.getAirdate());
 		this.setDuracion(episodioApi.getRuntime());
-		this.setDescripcion(episodioApi.getSummary());
+		String descripcion = episodioApi.getSummary().length() > Constantes.NUMERO_LIMITE_COLUMNA_TEXTO ? episodioApi.getSummary().substring(0,  Constantes.NUMERO_LIMITE_COLUMNA_TEXTO - Constantes.FINAL_PARRAFO.length()) + Constantes.FINAL_PARRAFO : episodioApi.getSummary();
+		this.setDescripcion(descripcion);
 	}
 	
 	

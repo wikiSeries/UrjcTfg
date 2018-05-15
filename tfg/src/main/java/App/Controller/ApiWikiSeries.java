@@ -196,6 +196,12 @@ public class ApiWikiSeries {
 				}
 				else {
 					actor.Actualizar(e.getPerson());
+					if(!serie.getActores().contains(actor)) {
+						serie.getActores().add(actor);
+					}
+					if(!actor.getSeries().contains(serie)) {
+						actor.getSeries().add(serie);
+					}
 				}
 				
 				Personaje personaje = repositorioPersonajes.findByIdApi(e.getCharacter().getId());
@@ -203,9 +209,14 @@ public class ApiWikiSeries {
 					personaje = new Personaje(e.getCharacter());
 					personaje.setActor(actor);
 					actor.getPersonajes().add(personaje);
+					
+					personaje.setSerie(serie);
+					serie.getPersonajes().add(personaje);
 				}
 				else {
 					personaje.Actualizar(e.getCharacter());
+					personaje.setActor(actor);
+					personaje.setSerie(serie);
 				}
 				
 				repositorioSeries.save(serie);

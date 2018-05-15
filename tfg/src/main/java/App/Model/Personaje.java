@@ -7,8 +7,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 public class Personaje {
 
@@ -20,10 +18,13 @@ public class Personaje {
 	private String nombre;
 	private String urlImagen;
 	
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "ACTOR_ID")
 	private Actor actor;
+	
+	@ManyToOne
+	@JoinColumn(name = "SERIE_ID")
+	private Serie serie;
 	
 	public Personaje() {
 		
@@ -35,6 +36,7 @@ public class Personaje {
 		this.urlImagen = urlImagen;
 		
 		this.actor = new Actor();
+		this.serie = new Serie();
 	}
 	
 	public Personaje(App.Model.TvMaze.Character character) {
@@ -49,6 +51,7 @@ public class Personaje {
 		}
 		
 		this.actor = new Actor();
+		this.serie = new Serie();
 	}
 
 	public Long getId() {
@@ -81,6 +84,14 @@ public class Personaje {
 
 	public void setUrlImagen(String urlImagen) {
 		this.urlImagen = urlImagen;
+	}
+
+	public Serie getSerie() {
+		return serie;
+	}
+
+	public void setSerie(Serie serie) {
+		this.serie = serie;
 	}
 
 	public Actor getActor() {

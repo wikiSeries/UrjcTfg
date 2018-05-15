@@ -17,9 +17,10 @@ public class Constantes {
 	public static final int LONGITUD_CONTRASEÑA_ALEATORIA = 8;
 	public static final int NUMERO_ELEMENTOS_FILA_PERSONAJES = 6;
 	public static final int NUMERO_ELEMENTOS_FILA_SERIES = 6;
+	public static final int NUMERO_LIMITE_COLUMNA_TEXTO = 65535;
 	
 	public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-
+	public static final String FINAL_PARRAFO = "...</p>";
 	
 	public static final String ERROR_USUARIO = "Usuario incorrecto. No existe el usuario '%s'";
 	public static final String ERROR_CONTRASEÑA = "Contraseña incorrecta";

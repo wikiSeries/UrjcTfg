@@ -324,7 +324,7 @@ public class SerieController {
 		model.addAttribute("idSerieApi", serie.getIdApi());
 		
 		UtilidadesLista<Personaje> utilList = new UtilidadesLista<Personaje>();
-		model.addAttribute("personajes", utilList.dividirListaPorNumeroElementosEnSubLista(repositorioPersonajes.findPersonajes(serie.getId()), Constantes.NUMERO_ELEMENTOS_FILA_PERSONAJES));
+		model.addAttribute("personajes", utilList.dividirListaPorNumeroElementosEnSubLista(serie.getPersonajes(), Constantes.NUMERO_ELEMENTOS_FILA_PERSONAJES));
 		
 		model.addAttribute("temporadas", serie.getTemporadas());
 		model.addAttribute("media", serie.getPuntuacionMediaEstrella());

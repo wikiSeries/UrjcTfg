@@ -6,15 +6,18 @@
 		
 		<link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />		
 		
-		<!-- Website Font style -->
 	    <link rel="stylesheet" th:href="@{/css/SeriesCookie.css}" />
-	    
+	    <link rel="stylesheet" th:href="@{/css/Comunes.css}" />
 	    
 		<script type="text/javascript" src="/webjars/jquery/3.1.1/jquery.min.js"></script>    
 		<script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="/webjars/font-awesome/5.0.6/on-server/js/fontawesome-all.js"></script>
+		<script src="/webjars/bootbox/4.4.0/bootbox.js"></script>
+		
 		
 		<script type="text/javascript" th:src="@{/js/SeriesCookie.js}"></script>
+		<script type="text/javascript" th:src="@{/js/Botones.js}"></script>
+		
 		
 		
 		
@@ -128,10 +131,14 @@
 			<div class="row spaceTop-50" id="tablonSeries">
 				<div class="col-sm-6 col-md-4" th:each="serie : ${series}">
 					   <div class="thumbnail">
-					     <a th:href="@{/InfoSerie/} + ${serie.id}"><img th:src="@{${serie.urlImage}}" /></a>
-					     <div class="caption text-center">
-					       <h3 th:text="${serie.titulo}"></h3>
-					     </div>
+							<div th:if="${esAdministrador == true}">
+								<i id = "iconoEliminarSerie" class="fas fa-trash-alt pull-right size-icon-30 clickable" th:onclick= "'confirmarEliminar(' + ${serie.id} + ')'"></i>
+							</div>
+							
+							<a th:href="@{/InfoSerie/} + ${serie.id}"><img th:id = "'image' + ${serie.id}" th:src="@{${serie.urlImage}}" /></a>
+							<div class="caption text-center">
+							  <h3 th:text="${serie.titulo}"></h3>
+							</div>
 					   </div>
 				</div>
 			</div>

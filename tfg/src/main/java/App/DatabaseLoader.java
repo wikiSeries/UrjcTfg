@@ -70,7 +70,7 @@ public class DatabaseLoader {
 		u2.setRoles(rolesU2);
 		
 		
-		Serie s1 = new Serie(8557, "Frontier", "Descripcion Serie", "2016-02-19", 6.9, "https://static.tvmaze.com/uploads/images/medium_portrait/81/204817.jpg");
+		/*Serie s1 = new Serie(8557, "Frontier", "Descripcion Serie", "2016-02-19", 6.9, "https://static.tvmaze.com/uploads/images/medium_portrait/81/204817.jpg");
 		Serie s2 = new Serie(73, "The Walking Dead", "Descripcion Serie", "2011-05-09", 6.2, "https://static.tvmaze.com/uploads/images/medium_portrait/136/340444.jpg");
 		Serie s3 = new Serie(2993, "Stranger Things", "Descripcion Serie", "2013-09-20", 8.3, "https://static.tvmaze.com/uploads/images/medium_portrait/132/330543.jpg");
 		Serie s4 = new Serie(13634, "Godless", "Descripcion Serie", "2017-01-13", 8.0, "https://static.tvmaze.com/uploads/images/medium_portrait/131/329494.jpg");
@@ -139,13 +139,13 @@ public class DatabaseLoader {
 		
 		u1.setIntentos(Constantes.NUMEROINTENTOSLOGIN);
 		u1.setBloqueado(false);
-		u1.getSeries().add(s1);
+		//u1.getSeries().add(s1);
 		
 		u2.setIntentos(Constantes.NUMEROINTENTOSLOGIN);
 		u2.setBloqueado(false);
 		
 		
-		repositorioSeries.save(s1);
+		/*repositorioSeries.save(s1);
 		repositorioSeries.save(s2);
 		repositorioSeries.save(s3);
 		repositorioSeries.save(s4);
@@ -163,5 +163,6 @@ public class DatabaseLoader {
 		repositorioRoles.save(rolBasico);
 		repositorioRoles.save(rolAdministrador);
 	}
-}
-*/
+}*/
+
+

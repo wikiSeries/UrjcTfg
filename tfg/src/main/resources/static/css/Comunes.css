@@ -3,3 +3,15 @@
 .space-Botom-25{
 	margin-botom: 25px;
 }
+
+.size-icon-30{
+	font-size: 30px;
+}
+
+.clickable{
+	cursor:pointer;
+}
+
+#iconoEliminarSerie:hover{
+	color:#337ab7
+}

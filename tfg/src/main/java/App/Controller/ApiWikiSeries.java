@@ -466,4 +466,100 @@ public class ApiWikiSeries {
 		
 	}
 	
+	@RequestMapping(value = "/EliminarSerie/{idSerie}", method = RequestMethod.DELETE)
+	public void eliminarSerie(@PathVariable("idSerie") Long id) {
+		try {
+			Serie serie = repositorioSeries.findById(id);
+			eliminarComentarios(serie.getComentarios());
+			eliminarPersonajes(serie.getPersonajes());
+			eliminarTemporadas(serie.getTemporadas());
+			
+			eliminarReferencias(serie);
+			
+			repositorioSeries.delete(serie);
+		}
+		catch(Exception ex) {
+			logger.error(String.format("EliminarSerie\n%s", Utilidades.formatedExceptionMessage(ex)));
+		}
+		
+	}
+	
+	private void eliminarComentarios(List<Comentario> comentarios) {
+		for(Comentario comentario : comentarios) {
+			try {
+				repositorioComentarios.delete(comentario);
+			}
+			catch(Exception ex) {
+				logger.error(String.format("EliminarComentario con id = %d\n%s", comentario.getId(), Utilidades.formatedExceptionMessage(ex)));
+			}
+		}
+	}
+	
+	private void eliminarPersonajes(List<Personaje> personajes) {
+		for(Personaje personaje : personajes) {
+			try {
+				repositorioPersonajes.delete(personaje);
+			}
+			catch(Exception ex) {
+				logger.error(String.format("EliminarPersonaje con id = %d\n%s", personaje.getId(), Utilidades.formatedExceptionMessage(ex)));
+			}
+		}
+	}
+	
+	private void eliminarTemporadas(List<Temporada> temporadas) {
+		for(Temporada temporada : temporadas) {
+			try {
+				eliminarEpisodios(temporada.getEpisodios());
+				repositorioTemporadas.delete(temporada);
+			}
+			catch(Exception ex) {
+				logger.error(String.format("EliminarTemporada con id = %d\n%s", temporada.getId(), Utilidades.formatedExceptionMessage(ex)));
+			}
+		}
+	}
+	
+	private void eliminarEpisodios(List<Episodio> episodios) {
+		for(Episodio episodio : episodios) {
+			repositorioEpisodios.delete(episodio);
+		}
+	}
+	
+	private void eliminarReferencias(Serie serie) {
+		List<Actor> artistas = serie.getActores();
+		for(Actor artista : artistas) {
+			try {
+				artista.getSeries().remove(serie);
+				repositorioActores.save(artista);
+			}
+			catch(Exception ex) {
+				logger.error(String.format("EliminarReferencias de la serie %s en el artista con id = %d\n%s", serie.getTitulo(), artista.getId(), Utilidades.formatedExceptionMessage(ex)));
+			}
+			
+		}
+		
+		List<Genero> generos = serie.getGeneros();
+		for(Genero genero : generos) {
+			try {
+				genero.getSeries().remove(serie);
+				repositorioGeneros.save(genero);
+			}
+			catch(Exception ex) {
+				logger.error(String.format("EliminarReferencias de la serie %s en el genero con id = %d\n%s", serie.getTitulo(), genero.getId(), Utilidades.formatedExceptionMessage(ex)));
+			}
+			
+		}
+		
+		List<Usuario> usuarios = serie.getUsuarios();
+		for(Usuario usuario : usuarios) {
+			try {
+				usuario.getSeries().remove(serie);
+				repositorioUsuarios.save(usuario);
+			}
+			catch(Exception ex) {
+				logger.error(String.format("EliminarReferencias de la serie %s en el usuario %s\n%s", serie.getTitulo(), usuario.getUsuario(), Utilidades.formatedExceptionMessage(ex)));
+			}
+			
+		}
+	}
+	
 }

@@ -47,5 +47,26 @@ function anadirSerie(idSerie, nombreUsuario){
 	});
 }
 
+function confirmarEliminar(idSerie){
+	return bootbox.confirm('¿Esta seguro de que desea eliminar la serie?', function(result) {
+		if (result == true) {
+			eliminarSerie(idSerie);
+		}
+	});
+}
+
+function eliminarSerie(id){
+	var idImage = "#image" + id;
+	$(idImage).attr("src", "/Images/loading.gif");
+	$.ajax({
+		type: "DELETE",
+		url: "/EliminarSerie/" + id,
+		contentType:"application/json",
+		dataType:"text",
+	}).done(function(){
+		location.reload();
+	});
+}
+
  
 

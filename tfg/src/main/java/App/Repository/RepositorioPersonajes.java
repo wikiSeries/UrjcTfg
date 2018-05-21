@@ -7,6 +7,6 @@ import App.Model.Personaje;
 
 public interface RepositorioPersonajes extends JpaRepository <Personaje, Long>{
 	
-	Personaje findByIdApi(int idApi);
+	public Personaje findByIdApi(int idApi);
 	
 }

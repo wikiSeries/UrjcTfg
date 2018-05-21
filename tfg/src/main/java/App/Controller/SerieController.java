@@ -48,9 +48,6 @@ public class SerieController {
 	private RepositorioGeneros repositorioGeneros;
 	
 	@Autowired
-	private RepositorioPersonajes repositorioPersonajes;
-	
-	@Autowired
 	private RepositorioUsuario repositorioUsuarios;
 	
 	@Autowired

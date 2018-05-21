@@ -55,11 +55,9 @@ public class NavegacionController {
 	@Autowired
 	private RepositorioRoles repositorioRoles;
 	
-	@RequestMapping(value="/login", method = RequestMethod.GET)
-	public String getPaginaPrincipal() {
-		
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String getLogin() {
 		return "Login";
-		
 	}
 	
 	@RequestMapping(value="/Registro", method = RequestMethod.GET)

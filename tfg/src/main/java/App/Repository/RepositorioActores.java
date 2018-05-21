@@ -6,5 +6,5 @@ import App.Model.Actor;
 
 public interface RepositorioActores extends JpaRepository <Actor, Long> {
 
-	Actor findByIdApi(int idApi);
+	public Actor findByIdApi(int idApi);
 }

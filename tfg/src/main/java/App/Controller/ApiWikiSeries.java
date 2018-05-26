@@ -87,7 +87,7 @@ public class ApiWikiSeries {
 						
 		}
 		catch(Exception ex) {
-			logger.error(String.format("GuardarSerieApi\n%s", Utilidades.formatedExceptionMessage(ex)));
+			logger.error(String.format("GuardarSerieApi%n%s", Utilidades.formatedExceptionMessage(ex)));
 			return "error";
 			
 		}
@@ -138,7 +138,7 @@ public class ApiWikiSeries {
 			
 		}
 		catch(Exception ex) {
-			logger.error(String.format("GuardarIdVideo\n%s", Utilidades.formatedExceptionMessage(ex)));
+			logger.error(String.format("GuardarIdVideo%n%s", Utilidades.formatedExceptionMessage(ex)));
 			return "Error al guardar el trailer: " + ex.getMessage();
 		}
 		
@@ -168,7 +168,7 @@ public class ApiWikiSeries {
 
 		}
 		catch(Exception ex) {
-			logger.error(String.format("DamePuntuacionMediaSerie\n%s", Utilidades.formatedExceptionMessage(ex)));
+			logger.error(String.format("DamePuntuacionMediaSerie%n%s", Utilidades.formatedExceptionMessage(ex)));
 			return -1;
 		}
 		
@@ -224,7 +224,7 @@ public class ApiWikiSeries {
 				repositorioPersonajes.save(personaje);
 			}
 			catch(Exception ex) {
-				logger.error(String.format("GuardarPersonajes\n%s", Utilidades.formatedExceptionMessage(ex)));
+				logger.error(String.format("GuardarPersonajes%n%s", Utilidades.formatedExceptionMessage(ex)));
 			}
 			
 		}
@@ -247,7 +247,7 @@ public class ApiWikiSeries {
 				repositorioTemporadas.save(temporada);
 			}
 			catch(Exception ex) {
-				logger.error(String.format("GuardarTemporadas\n%s", Utilidades.formatedExceptionMessage(ex)));
+				logger.error(String.format("GuardarTemporadas%n%s", Utilidades.formatedExceptionMessage(ex)));
 			}
 			
 		}
@@ -272,7 +272,7 @@ public class ApiWikiSeries {
 				}
 			}
 			catch(Exception ex) {
-				logger.error(String.format("GuardarEpisodios\n%s", Utilidades.formatedExceptionMessage(ex)));
+				logger.error(String.format("GuardarEpisodios%n%s", Utilidades.formatedExceptionMessage(ex)));
 			}
 		}
 	}
@@ -305,7 +305,7 @@ public class ApiWikiSeries {
 		}
 		
 		catch(Exception ex) {
-			logger.error(String.format("EnviarComentario\n%s", Utilidades.formatedExceptionMessage(ex)));
+			logger.error(String.format("EnviarComentario%n%s", Utilidades.formatedExceptionMessage(ex)));
 		}
 		
 		return "error";
@@ -338,7 +338,7 @@ public class ApiWikiSeries {
 			return newContador;
 		}
 		catch(Exception ex) {
-			logger.error(String.format("ActualizarContador\n%s", Utilidades.formatedExceptionMessage(ex)));
+			logger.error(String.format("ActualizarContador%n%s", Utilidades.formatedExceptionMessage(ex)));
 			return -1;
 		}
 	}
@@ -377,8 +377,8 @@ public class ApiWikiSeries {
 			
 		}
 		catch(Exception ex) {
-			logger.error(String.format("AñadirSerie\n%s", Utilidades.formatedExceptionMessage(ex)));
-			return String.format("Error al añadir la serie");
+			logger.error(String.format("AñadirSerie%n%s", Utilidades.formatedExceptionMessage(ex)));
+			return "Error al añadir la serie";
 		}
 				
 	}
@@ -425,7 +425,7 @@ public class ApiWikiSeries {
 	
 		}
 		catch(Exception ex) {
-			logger.error(String.format("Episodio - accion: pasar a la lista '%s'\n%s", accion, Utilidades.formatedExceptionMessage(ex)));
+			logger.error(String.format("Episodio - accion: pasar a la lista '%s'%n%s", accion, Utilidades.formatedExceptionMessage(ex)));
 		}
 			
 	}
@@ -448,7 +448,7 @@ public class ApiWikiSeries {
 						repositorioEpisodios.save(e);
 					}
 					catch(Exception ex) {
-						throw ex;
+						logger.error(String.format("EliminarMiSerie%n%s", Utilidades.formatedExceptionMessage(ex)));
 					}
 					
 				}
@@ -461,7 +461,7 @@ public class ApiWikiSeries {
 			repositorioSeries.save(serie);
 		}
 		catch(Exception ex) {
-			logger.error(String.format("EliminarMiSerie\n%s", Utilidades.formatedExceptionMessage(ex)));
+			logger.error(String.format("EliminarMiSerie%n%s", Utilidades.formatedExceptionMessage(ex)));
 		}
 		
 	}
@@ -479,7 +479,7 @@ public class ApiWikiSeries {
 			repositorioSeries.delete(serie);
 		}
 		catch(Exception ex) {
-			logger.error(String.format("EliminarSerie\n%s", Utilidades.formatedExceptionMessage(ex)));
+			logger.error(String.format("EliminarSerie%n%s", Utilidades.formatedExceptionMessage(ex)));
 		}
 		
 	}
@@ -490,7 +490,7 @@ public class ApiWikiSeries {
 				repositorioComentarios.delete(comentario);
 			}
 			catch(Exception ex) {
-				logger.error(String.format("EliminarComentario con id = %d\n%s", comentario.getId(), Utilidades.formatedExceptionMessage(ex)));
+				logger.error(String.format("EliminarComentario con id = %d%n%s", comentario.getId(), Utilidades.formatedExceptionMessage(ex)));
 			}
 		}
 	}
@@ -501,7 +501,7 @@ public class ApiWikiSeries {
 				repositorioPersonajes.delete(personaje);
 			}
 			catch(Exception ex) {
-				logger.error(String.format("EliminarPersonaje con id = %d\n%s", personaje.getId(), Utilidades.formatedExceptionMessage(ex)));
+				logger.error(String.format("EliminarPersonaje con id = %d%n%s", personaje.getId(), Utilidades.formatedExceptionMessage(ex)));
 			}
 		}
 	}
@@ -513,7 +513,7 @@ public class ApiWikiSeries {
 				repositorioTemporadas.delete(temporada);
 			}
 			catch(Exception ex) {
-				logger.error(String.format("EliminarTemporada con id = %d\n%s", temporada.getId(), Utilidades.formatedExceptionMessage(ex)));
+				logger.error(String.format("EliminarTemporada con id = %d%n%s", temporada.getId(), Utilidades.formatedExceptionMessage(ex)));
 			}
 		}
 	}
@@ -532,7 +532,7 @@ public class ApiWikiSeries {
 				repositorioActores.save(artista);
 			}
 			catch(Exception ex) {
-				logger.error(String.format("EliminarReferencias de la serie %s en el artista con id = %d\n%s", serie.getTitulo(), artista.getId(), Utilidades.formatedExceptionMessage(ex)));
+				logger.error(String.format("EliminarReferencias de la serie %s en el artista con id = %d%n%s", serie.getTitulo(), artista.getId(), Utilidades.formatedExceptionMessage(ex)));
 			}
 			
 		}
@@ -544,7 +544,7 @@ public class ApiWikiSeries {
 				repositorioGeneros.save(genero);
 			}
 			catch(Exception ex) {
-				logger.error(String.format("EliminarReferencias de la serie %s en el genero con id = %d\n%s", serie.getTitulo(), genero.getId(), Utilidades.formatedExceptionMessage(ex)));
+				logger.error(String.format("EliminarReferencias de la serie %s en el genero con id = %d%n%s", serie.getTitulo(), genero.getId(), Utilidades.formatedExceptionMessage(ex)));
 			}
 			
 		}
@@ -556,7 +556,7 @@ public class ApiWikiSeries {
 				repositorioUsuarios.save(usuario);
 			}
 			catch(Exception ex) {
-				logger.error(String.format("EliminarReferencias de la serie %s en el usuario %s\n%s", serie.getTitulo(), usuario.getUsuario(), Utilidades.formatedExceptionMessage(ex)));
+				logger.error(String.format("EliminarReferencias de la serie %s en el usuario %s%n%s", serie.getTitulo(), usuario.getUsuario(), Utilidades.formatedExceptionMessage(ex)));
 			}
 			
 		}

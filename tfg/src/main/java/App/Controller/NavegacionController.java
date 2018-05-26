@@ -1,6 +1,5 @@
 package App.Controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,7 +105,7 @@ public class NavegacionController {
 				int paginaAnterior = paginaActual - 1;
 				int paginaSiguiente = paginaActual + 1;
 				
-				int indices [] = new int[page.getTotalPages()];
+				int [] indices = new int[page.getTotalPages()];
 				for(int i = 0; i < indices.length; i++) {
 					indices[i] = i + 1;
 				}
@@ -140,7 +139,7 @@ public class NavegacionController {
 			return "redirect:/login";
 		}
 		catch(Exception ex) {
-			logger.error(String.format("Pagina Principal\n%s", Utilidades.formatedExceptionMessage(ex)));
+			logger.error(String.format("Pagina Principal%n%s", Utilidades.formatedExceptionMessage(ex)));
 			model.addAttribute("error", "Pagina Principal");
 			model.addAttribute("descripcion", "Se ha producido un error al cargar la pagina principal."
 								+ "Vuelva a intentarlo mas tarde o pongase en contacto con el administrador.");
@@ -172,7 +171,7 @@ public class NavegacionController {
 				int paginaAnterior = paginaActual - 1;
 				int paginaSiguiente = paginaActual + 1;
 				
-				int indices [] = new int[pages.getTotalPages()];
+				int [] indices = new int[pages.getTotalPages()];
 				for(int i = 0; i < indices.length; i++) {
 					indices[i] = i + 1;
 				}
@@ -196,7 +195,7 @@ public class NavegacionController {
 			return  "redirect:/login";
 		}
 		catch(Exception ex) {
-			logger.error(String.format("Genero\n%s", Utilidades.formatedExceptionMessage(ex)));
+			logger.error(String.format("Genero%n%s", Utilidades.formatedExceptionMessage(ex)));
 			model.addAttribute("error", "Filtrar por genero");
 			model.addAttribute("descripcion", "Se ha producido un error al filtrar las series por el genero."
 								+ "Vuelva a intentarlo mas tarde o pongase en contacto con el administrador.");
@@ -224,7 +223,7 @@ public class NavegacionController {
 				int paginaAnterior = paginaActual - 1;
 				int paginaSiguiente = paginaActual + 1;
 				
-				int indices [] = new int[pages.getTotalPages()];
+				int [] indices = new int[pages.getTotalPages()];
 				for(int i = 0; i < indices.length; i++) {
 					indices[i] = i + 1;
 				}
@@ -245,7 +244,7 @@ public class NavegacionController {
 			return "redirect:/login";
 		}
 		catch(Exception ex) {
-			logger.error(String.format("BuscarTitulo\n%s", Utilidades.formatedExceptionMessage(ex)));
+			logger.error(String.format("BuscarTitulo%n%s", Utilidades.formatedExceptionMessage(ex)));
 			model.addAttribute("error", "Buscar serie por titulo");
 			model.addAttribute("descripcion", "Se ha producido un error al buscar la serie por el su titulo."
 								+ "Vuelva a intentarlo mas tarde o pongase en contacto con el administrador.");
@@ -280,7 +279,7 @@ public class NavegacionController {
 			return "redirect:/login";
 		}
 		catch(Exception ex) {
-			logger.error(String.format("BusquedaAvanzada\n%s", Utilidades.formatedExceptionMessage(ex)));
+			logger.error(String.format("BusquedaAvanzada%n%s", Utilidades.formatedExceptionMessage(ex)));
 			model.addAttribute("error", "Busqueza avanzada");
 			model.addAttribute("descripcion", "Se ha producido un error al utilizar la busqueda avanzada."
 								+ "Vuelva a intentarlo mas tarde o pongase en contacto con el administrador.");
@@ -313,7 +312,7 @@ public class NavegacionController {
 			return "redirect:/login";
 		}
 		catch(Exception ex) {
-			logger.error(String.format("Perfil\n%s", Utilidades.formatedExceptionMessage(ex)));
+			logger.error(String.format("Perfil%n%s", Utilidades.formatedExceptionMessage(ex)));
 			model.addAttribute("error", "Mi perfil");
 			model.addAttribute("descripcion", "Se ha producido un error al acceder a su perfil."
 								+ "Vuelva a intentarlo mas tarde o pongase en contacto con el administrador.");
@@ -323,7 +322,7 @@ public class NavegacionController {
 	}
 	
 	@RequestMapping(value = "/Logout", method = RequestMethod.GET)
-	public String logout(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws ServletException, IOException {
+	public String logout(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws ServletException {
 		
 		HttpSession session = httpRequest.getSession();
 		session.invalidate();
@@ -366,7 +365,7 @@ public class NavegacionController {
 			return "redirect:/login";
 		}
 		catch(Exception ex) {
-			logger.error(String.format("FichaInterprete\n%s", Utilidades.formatedExceptionMessage(ex)));
+			logger.error(String.format("FichaInterprete%n%s", Utilidades.formatedExceptionMessage(ex)));
 			model.addAttribute("error", "Ficha interprete");
 			model.addAttribute("descripcion", "Se ha producido al cargar la informacion del interprete seleccionado."
 								+ "Vuelva a intentarlo mas tarde o pongase en contacto con el administrador.");
@@ -381,8 +380,8 @@ public class NavegacionController {
 
 		List<Genero> generosSeriesCookies = Utilidades.getGenerosSeriesCookies(seriesCookiesNoRepeat);
 		PageRequest pageRequest = new PageRequest(0, Constantes.NUMERO_IDSERIE_COOKIE, Sort.Direction.ASC, "puntuacionMediaEstrella");
-		List<Serie> series = repositorioSeries.findDistinctByGenerosIn(generosSeriesCookies, pageRequest);
-		return series;
+		return repositorioSeries.findDistinctByGenerosIn(generosSeriesCookies, pageRequest);
+		
 	}
 
 	

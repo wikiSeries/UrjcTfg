@@ -1,7 +1,7 @@
 $.fn.passwordStrength = function (option) {
     var ele = $(this);
-    settings = $.extend($.tester.defaultSettings, option);
-    tester = new $.tester(ele, settings);
+    var settings = $.extend($.tester.defaultSettings, option);
+    var tester = new $.tester(ele, settings);
     return tester;
 }
 

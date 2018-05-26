@@ -32,7 +32,6 @@ import App.Model.Personaje;
 import App.Model.Serie;
 import App.Model.Usuario;
 import App.Repository.RepositorioGeneros;
-import App.Repository.RepositorioPersonajes;
 import App.Repository.RepositorioRoles;
 import App.Repository.RepositorioSeries;
 import App.Repository.RepositorioUsuario;
@@ -83,7 +82,7 @@ public class SerieController {
 			return "redirect:/login";
 		}
 		catch(Exception ex) {
-			logger.error(String.format("InfoSerie\n%s", Utilidades.formatedExceptionMessage(ex)));	
+			logger.error(String.format("InfoSerie%n%s", Utilidades.formatedExceptionMessage(ex)));	
 			model.addAttribute("error", "Informacion de la serie");
 			model.addAttribute("descripcion", "Se ha producido un error al obtener la informacion de la serie."
 					+ "Vuelva a intentarlo mas tarde o pongase en contacto con el administrasdor.");
@@ -108,7 +107,7 @@ public class SerieController {
 				int paginaAnterior = paginaActual - 1;
 				int paginaSiguiente = paginaActual + 1;
 				
-				int indices [] = new int[pages.getTotalPages()];
+				int [] indices = new int[pages.getTotalPages()];
 				for(int i = 0; i < indices.length; i++) {
 					indices[i] = i + 1;
 				}
@@ -129,7 +128,7 @@ public class SerieController {
 			return "redirect:/login";
 		}
 		catch(Exception ex) {
-			logger.error(String.format("BuscarTtitulo\n%s", Utilidades.formatedExceptionMessage(ex)));	
+			logger.error(String.format("BuscarTtitulo%n%s", Utilidades.formatedExceptionMessage(ex)));	
 			model.addAttribute("error", "Buscar serie por titulo");
 			model.addAttribute("descripcion", "Se ha producido un error al realizar la busqueda por titulo."
 					+ "Vuelva a intentarlo mas tarde o pongase en contacto con el administrasdor.");
@@ -185,7 +184,7 @@ public class SerieController {
 			return "redirect:/login";	
 		}
 		catch(Exception ex) {
-			logger.error(String.format("BuscarTtitulo\n%s", Utilidades.formatedExceptionMessage(ex)));	
+			logger.error(String.format("BuscarTtitulo%n%s", Utilidades.formatedExceptionMessage(ex)));	
 			model.addAttribute("error", "Buscar serie por titulo");
 			model.addAttribute("descripcion", "Se ha producido un error al realizar la busqueda por titulo."
 					+ "Vuelva a intentarlo mas tarde o pongase en contacto con el administrasdor.");
@@ -297,7 +296,7 @@ public class SerieController {
 			return "redirect:/login";
 		}
 		catch(Exception ex) {
-			logger.error(String.format("MisSeries\n%s", Utilidades.formatedExceptionMessage(ex)));	
+			logger.error(String.format("MisSeries%n%s", Utilidades.formatedExceptionMessage(ex)));	
 			model.addAttribute("error", "Mis series");
 			model.addAttribute("descripcion", "Se ha producido un error al cargar sus listas de series."
 					+ "Vuelva a intentarlo mas tarde o pongase en contacto con el administrasdor.");

@@ -23,7 +23,9 @@ import App.Model.Genero;
 import App.Model.Serie;
 
 public class Utilidades {
-	
+	private Utilidades() {
+		
+	}
 	
 	public static final List<Long> getIdSeriesNoRepeat(String idSeries){
 		String idSeriesDec = getTextDecoded(idSeries);
@@ -81,9 +83,8 @@ public class Utilidades {
 	}
 	
 	public static final String generarNuevaContraseñaAleatoria() {
-		String generatedString = RandomStringUtils.randomAlphanumeric(Constantes.LONGITUD_CONTRASEÑA_ALEATORIA);
+		return RandomStringUtils.randomAlphanumeric(Constantes.LONGITUD_CONTRASEÑA_ALEATORIA);
 
-		return generatedString;
 	}
 	
 	public static final boolean validarFormatoCorreo(String correo){
@@ -101,8 +102,8 @@ public class Utilidades {
 		ex.printStackTrace(pw);
 		
 		exceptionMessage
-			.append(String.format("Causa: %s\n", ex.getCause()))
-			.append(String.format("Descripcion: %s\n", ex.getMessage()))
+			.append(String.format("Causa: %s%n", ex.getCause()))
+			.append(String.format("Descripcion: %s%n", ex.getMessage()))
 			.append(String.format("Rastro de la pila: %s", sw.toString()));
 		
 		return exceptionMessage.toString();
@@ -157,6 +158,7 @@ public class Utilidades {
 		Cookie cookie = new Cookie(claveCod, valorCod);
 		cookie.setMaxAge(Constantes.TIEMPO_COOKIE_SERIE_USUARIO);
 		cookie.setPath("/");
+		cookie.setSecure(true);
 		
 		return cookie;
 	}

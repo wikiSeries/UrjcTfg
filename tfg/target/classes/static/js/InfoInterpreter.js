@@ -48,8 +48,8 @@ var TFG = (function($, Promise){
 			
 			return Promise.all([pM, pF])
 				.then(function(results){
-					dataM = results[0];
-					dataF = results[1];
+					var dataM = results[0];
+					var dataF = results[1];
 					
 					if(dataM.error != null && dataF.error != null){
 						var error = new Error("No se han encontrado resultados");
@@ -79,7 +79,7 @@ var TFG = (function($, Promise){
 		function GetInfoSections(sections){
 			var promisesColl = [];
 			
-			for(i = 0; i < sections.length; i++){
+			for(var i = 0; i < sections.length; i++){
 				
 				var title = sections[i].fromtitle;
 				var indexSection = sections[i].index;
@@ -120,7 +120,7 @@ var TFG = (function($, Promise){
 			
 			var sections = {};
 			
-			for(i = 0; i < entitiesSections.length; i++){
+			for(var i = 0; i < entitiesSections.length; i++){
 				var nameSection = entitiesSections[i].key;
 				var textSection = entitiesSections[i].value;
 				
@@ -162,7 +162,7 @@ var TFG = (function($, Promise){
 		return{
 			showInfo: function(infoSections){
 				$(viewConfig.idElementLoading).css("display", "none");
-				for(i = 0; i < viewConfig.sectionToShow.length; i++){
+				for(var i = 0; i < viewConfig.sectionToShow.length; i++){
 					$(viewConfig.idElement).append(infoSections[viewConfig.sectionToShow[i]]);
 				}
 			},
@@ -186,7 +186,7 @@ var TFG = (function($, Promise){
 		
 		var infoInterpreter = this.InfoInterpreter;
 		
-		var dataInit = DATA.Load(name)
+		DATA.Load(name)
 			.then(function(data){
 				infoInterpreter.Sections = data; 
 				infoInterpreter.Loaded = true;

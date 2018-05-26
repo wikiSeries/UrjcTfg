@@ -8,7 +8,7 @@ jQuery.fn.extend({
   rating: function(options){
     if(typeof(options)=='undefined') options={};
     var ratings=[];
-    objs=this;
+    var objs=this;
     if(objs.length){
       for(var i=0;i<objs.length;i++){
         ratings.push(new simpleRating(options,objs[i]));

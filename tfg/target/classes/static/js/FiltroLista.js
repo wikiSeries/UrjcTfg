@@ -1,7 +1,6 @@
 
-(function(){
+(function($){
     'use strict';
-	var $ = jQuery;
 	$.fn.extend({
 		filterTable: function(){
 			return this.each(function(){
@@ -31,7 +30,7 @@
 		}
 	});
 	$('[data-action="filter"]').filterTable();
-})(jQuery);
+})($);
 
 $(function(){
     // attach table filter plugin to inputs
@@ -63,7 +62,7 @@ function infoEpisodio(titulo, descripcion, duracion, estreno){
 
 	var mensaje = "<div class = \"row\">" + descripcion +
 						"<p>Duracion: " + duracion + "</p>" +
-						"<p>Fecha de estreno: " + estreno + "</p>"
+						"<p>Fecha de estreno: " + estreno + "</p>" +
 					"</div>";
 	
 	bootbox.dialog({

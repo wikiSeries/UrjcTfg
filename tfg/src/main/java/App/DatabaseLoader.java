@@ -1,4 +1,4 @@
-/*package App;
+package App;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import App.Repository.RepositorioUsuario;
 @Component
 public class DatabaseLoader {
 	
-	@Autowired
+	/*@Autowired
 	private RepositorioRoles repositorioRoles;
 	
 	@Autowired
@@ -163,6 +163,7 @@ public class DatabaseLoader {
 		repositorioRoles.save(rolBasico);
 		repositorioRoles.save(rolAdministrador);
 	}
-}*/
+	*/
+}
 
 

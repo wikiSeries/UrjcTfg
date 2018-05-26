@@ -55,7 +55,7 @@ var TFG = (function($, Promise){
 		return {
 			completeForm: function(dataConexion){
 				var ids = viewConfig.idFieldsForm;
-				for(i = 0; i < ids.length; i++){
+				for(var i = 0; i < ids.length; i++){
 					document.getElementById(ids[i]).value = dataConexion[ids[i]];
 				}
 			}

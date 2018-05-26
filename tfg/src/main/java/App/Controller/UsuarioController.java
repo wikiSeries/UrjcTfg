@@ -95,7 +95,7 @@ public class UsuarioController {
 			return "/Login";
 		} catch (Exception ex) {
 
-			logger.error(String.format("Iniciar Sesion\n%s", Utilidades.formatedExceptionMessage(ex)));
+			logger.error(String.format("Iniciar Sesion%n%s", Utilidades.formatedExceptionMessage(ex)));
 
 			model.addAttribute("error", "Inicio de sesion");
 			model.addAttribute("descripcion", "Se ha producido un error al intentar iniciar la sesion actual."
@@ -130,7 +130,7 @@ public class UsuarioController {
 					}
 
 				} else {
-					errorDescripcion.append(String.format("%s Causas del error:\n-%s\n%s", Constantes.ERROR_BLOQ,
+					errorDescripcion.append(String.format("%s Causas del error:%n-%s%n%s", Constantes.ERROR_BLOQ,
 							Constantes.ERROR_BLOQ_DESC, Constantes.ERROR_ACTIVAR_DESC));
 				}
 
@@ -193,7 +193,7 @@ public class UsuarioController {
 
 			return "RegistroUsuario";
 		} catch (Exception ex) {
-			logger.error(String.format("Registro de usuario\n%s", Utilidades.formatedExceptionMessage(ex)));
+			logger.error(String.format("Registro de usuario%n%s", Utilidades.formatedExceptionMessage(ex)));
 
 			model.addAttribute("error", "Registro");
 			model.addAttribute("descripcion", "Se ha producido un error al intentar registrar un nuevo usuario"
@@ -247,7 +247,7 @@ public class UsuarioController {
 
 			return "PaginaError";
 		} catch (Exception ex) {
-			logger.error(String.format("ActivarCuentaUsuario\n%s", Utilidades.formatedExceptionMessage(ex)));
+			logger.error(String.format("ActivarCuentaUsuario%n%s", Utilidades.formatedExceptionMessage(ex)));
 
 			model.addAttribute("error", "Activacion de cuenta");
 			model.addAttribute("descripcion", "Se ha producido un error al intentar activar su cuenta de usuario"
@@ -302,7 +302,7 @@ public class UsuarioController {
 
 			return "RecuperarCuenta";
 		} catch (Exception ex) {
-			logger.error(String.format("RecordarCuenta\n%s", Utilidades.formatedExceptionMessage(ex)));
+			logger.error(String.format("RecordarCuenta%n%s", Utilidades.formatedExceptionMessage(ex)));
 
 			model.addAttribute("error", "Recordar cuenta");
 			model.addAttribute("descripcion",
@@ -369,7 +369,7 @@ public class UsuarioController {
 			return "PaginaOk";
 
 		} catch (Exception ex) {
-			logger.error(String.format("Comentario\n%s", Utilidades.formatedExceptionMessage(ex)));
+			logger.error(String.format("Comentario%n%s", Utilidades.formatedExceptionMessage(ex)));
 
 			model.addAttribute("error", "Clasifiacion de comentario");
 			model.addAttribute("descripcion", "Se ha producido un error al intentar gestionar el comentario."
@@ -407,22 +407,23 @@ public class UsuarioController {
 					} else {
 						model.addAttribute("errorPasswordActual", "La contraseña actual es erronea");
 					}
+					String tipoUsuario = usuario.getRoles().contains(repositorioRoles.findByTipo(Constantes.TIPO_ADMINISTRADOR)) ? Constantes.TIPO_ADMINISTRADOR : Constantes.TIPO_BASICO;
+
+					model.addAttribute("nombre", String.format("%s %s", usuario.getNombre(), usuario.getApellidos()));
+					model.addAttribute("nombreUsuario", usuario.getUsuario());
+					model.addAttribute("correo", usuario.getCorreo());
+					model.addAttribute("fechaRegistro", usuario.getFechaCreacion());
+					model.addAttribute("tipoUsuario", tipoUsuario);
+
+
+					return "Perfil";
 				}
-				String tipoUsuario = usuario.getRoles().contains(repositorioRoles.findByTipo(Constantes.TIPO_ADMINISTRADOR)) ? Constantes.TIPO_ADMINISTRADOR : Constantes.TIPO_BASICO;
-
-				model.addAttribute("nombre", String.format("%s %s", usuario.getNombre(), usuario.getApellidos()));
-				model.addAttribute("nombreUsuario", usuario.getUsuario());
-				model.addAttribute("correo", usuario.getCorreo());
-				model.addAttribute("fechaRegistro", usuario.getFechaCreacion());
-				model.addAttribute("tipoUsuario", tipoUsuario);
-
-
-				return "Perfil";
+				
 			}
 
 			return "redirect:/login";
 		} catch (Exception ex) {
-			logger.error(String.format("CambiarPassword\n%s", Utilidades.formatedExceptionMessage(ex)));
+			logger.error(String.format("CambiarPassword%n%s", Utilidades.formatedExceptionMessage(ex)));
 
 			model.addAttribute("error", "Cambiar Contraseña");
 			model.addAttribute("descripcion", "Se ha producido un error al cambiar la contraseña."
@@ -463,22 +464,22 @@ public class UsuarioController {
 						}
 
 					}
+					String tipoUsuario = usuario.getRoles().contains(repositorioRoles.findByTipo(Constantes.TIPO_ADMINISTRADOR)) ? Constantes.TIPO_ADMINISTRADOR : Constantes.TIPO_BASICO;
+
+					model.addAttribute("nombre", String.format("%s %s", usuario.getNombre(), usuario.getApellidos()));
+					model.addAttribute("nombreUsuario", usuario.getUsuario());
+					model.addAttribute("correo", usuario.getCorreo());
+					model.addAttribute("fechaRegistro", usuario.getFechaCreacion());
+					model.addAttribute("tipoUsuario", tipoUsuario);
+					
+					return "Perfil";
 				}
-				String tipoUsuario = usuario.getRoles().contains(repositorioRoles.findByTipo(Constantes.TIPO_ADMINISTRADOR)) ? Constantes.TIPO_ADMINISTRADOR : Constantes.TIPO_BASICO;
-
-				model.addAttribute("nombre", String.format("%s %s", usuario.getNombre(), usuario.getApellidos()));
-				model.addAttribute("nombreUsuario", usuario.getUsuario());
-				model.addAttribute("correo", usuario.getCorreo());
-				model.addAttribute("fechaRegistro", usuario.getFechaCreacion());
-				model.addAttribute("tipoUsuario", tipoUsuario);
-
-
-				return "Perfil";
+					
 			}
 
 			return "redirect:/login";
 		} catch (Exception ex) {
-			logger.error(String.format("CambiarCorreo\n%s", Utilidades.formatedExceptionMessage(ex)));
+			logger.error(String.format("CambiarCorreo%n%s", Utilidades.formatedExceptionMessage(ex)));
 
 			model.addAttribute("error", "Cambiar direccion de correo electronico");
 			model.addAttribute("descripcion", "Se ha producido un error al cambiar la direccion de correo."
@@ -531,7 +532,7 @@ public class UsuarioController {
 			return "login";			
 		}
 		catch(Exception ex) {
-			logger.error(String.format("confirmarCmbioCorreo\n%s", Utilidades.formatedExceptionMessage(ex)));
+			logger.error(String.format("confirmarCmbioCorreo%n%s", Utilidades.formatedExceptionMessage(ex)));
 
 			model.addAttribute("error", "Confirmar cambio de direccion de correo electronico");
 			model.addAttribute("descripcion", "Se ha producido un error al cambiar la direccion de correo."

@@ -6,8 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,8 +31,6 @@ import App.Repository.RepositorioUsuario;
 
 @Controller
 public class UsuarioController {
-
-	private Logger logger = Logger.getLogger("file");
 
 	@Autowired
 	private RepositorioUsuario repositorioUsuarios;
@@ -63,10 +59,10 @@ public class UsuarioController {
 		try {
 			Usuario usuario = repositorioUsuarios.findByUsuario(nombreUsuario);
 			StringBuilder errorUsuario = new StringBuilder();
-			StringBuilder errorContraseña = new StringBuilder();
+			StringBuilder errorContrasena = new StringBuilder();
 			StringBuilder errorDescripcion = new StringBuilder();
 
-			if (this.validarUsuario(usuario, nombreUsuario, contrasena, errorUsuario, errorContraseña,
+			if (this.validarUsuario(usuario, nombreUsuario, contrasena, errorUsuario, errorContrasena,
 					errorDescripcion)) {
 				Conexion conexion = new Conexion(ciudad, pais, ip, provincia, codigoPostal);
 
@@ -89,102 +85,86 @@ public class UsuarioController {
 			}
 
 			model.addAttribute("errorUsuario", errorUsuario.toString());
-			model.addAttribute("errorContrasena", errorContraseña.toString());
+			model.addAttribute("errorContrasena", errorContrasena.toString());
 			model.addAttribute("errorDescripcion", errorDescripcion.toString());
 
 			return "/Login";
 		} catch (Exception ex) {
-
-			logger.error(String.format("Iniciar Sesion%n%s", Utilidades.formatedExceptionMessage(ex)));
-
-			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Inicio de sesion");
-			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al intentar iniciar la sesion actual."
-					+ Constantes.CONTACT_WITH_ADMIN);
-			return Constantes.TEMPLATE_PAGINA_ERROR;
+			
+			return Utilidades.logErrorAndGetPageError(ex, "Iniciar sesion", model, "Inicio de sesion", "Se ha producido un error al intentar iniciar la sesion actual."+ Constantes.CONTACT_WITH_ADMIN);			 
 		}
 
 	}
 
 	private boolean validarUsuario(Usuario usuario, String nombreUsuario, String contrasena,
-			StringBuilder errorUsuario, StringBuilder errorContraseña, StringBuilder errorDescripcion)
+			StringBuilder errorUsuario, StringBuilder errorContrasena, StringBuilder errorDescripcion)
 			throws NoSuchAlgorithmException {
-
+		boolean validado = false;
 		if (usuario != null) {
 
 			if (Utilidades.comprobarContraseña(contrasena, usuario.getContraseña())) {
-				if (!usuario.isBloqueado()) {
-					usuario.setIntentos(Constantes.NUMEROINTENTOSLOGIN);
-					return true;
-				} else {
-					errorDescripcion.append(Constantes.ERROR_BLOQ_DESC);
-				}
+				validado = validarUsuarioAux(usuario, errorDescripcion);
 			} else {
-				if (!usuario.isBloqueado()) {
-					usuario.setIntentos(usuario.getIntentos() - 1);
-					usuario.setBloqueado(usuario.isBloqueado());
-					if (usuario.isBloqueado()) {
-						errorDescripcion.append(Constantes.ERROR_BLOQ_DESC);
-					} else {
-						errorContraseña.append(Constantes.ERROR_CONTRASENA);
-						errorDescripcion.append(String.format(Constantes.ERROR_CONTRASENA_DESC, usuario.getIntentos()));
-					}
-
-				} else {
-					errorDescripcion.append(String.format("%s Causas del error:%n-%s%n%s", Constantes.ERROR_BLOQ,
-							Constantes.ERROR_BLOQ_DESC, Constantes.ERROR_ACTIVAR_DESC));
-				}
-
+				comprobarError(usuario, errorContrasena, errorDescripcion);
 			}
 
 		} else {
 			errorUsuario.append(String.format(Constantes.ERROR_USUARIO, nombreUsuario));
 		}
 
-		return false;
+		return validado;
+	}
+	
+	private boolean validarUsuarioAux(Usuario usuario, StringBuilder errorDescripcion) {
+		boolean validado = !usuario.isBloqueado();
+		if(validado) {
+			usuario.setIntentos(Constantes.NUMEROINTENTOSLOGIN);
+		}
+		else {
+			errorDescripcion.append(Constantes.ERROR_BLOQ_DESC);
+		}
+		
+		return validado;
+	}
+	
+	private void comprobarError(Usuario usuario, StringBuilder errorContrasena, StringBuilder errorDescripcion) {
+		if (!usuario.isBloqueado()) {
+			usuario.setIntentos(usuario.getIntentos() - 1);
+			usuario.setBloqueado(usuario.isBloqueado());
+			if (usuario.isBloqueado()) {
+				errorDescripcion.append(Constantes.ERROR_BLOQ_DESC);
+			} else {
+				errorContrasena.append(Constantes.ERROR_CONTRASENA);
+				errorDescripcion.append(String.format(Constantes.ERROR_CONTRASENA_DESC, usuario.getIntentos()));
+			}
+
+		} else {
+			errorDescripcion.append(String.format("%s Causas del error:%n-%s%n%s", Constantes.ERROR_BLOQ,
+					Constantes.ERROR_BLOQ_DESC, Constantes.ERROR_ACTIVAR_DESC));
+		}
 	}
 
 	@RequestMapping(value = "/Registro", method = RequestMethod.POST)
 	public String registrarUsuario(@RequestParam("name") String nombre, @RequestParam("surname") String apellidos,
-			/** @RequestParam("phone") String telefono, **/
 			@RequestParam("email") String correo, @RequestParam("username") String nombreUsuario,
-			@RequestParam("password") String contraseña, @RequestParam("passwordConfirm") String confirmacionContraseña,
+			@RequestParam("password") String contrasena, @RequestParam("passwordConfirm") String confirmacionContrasena,
 			Model model) throws NoSuchAlgorithmException {
 
 		try {
 			Usuario usuario = repositorioUsuarios.findByUsuario(nombreUsuario);
 
 			if (usuario == null) {
-				if(Utilidades.validarFormatoCorreo(correo)) {
-					if (contraseña.equals(confirmacionContraseña)) {
-						Rol rolBasico = repositorioRoles.findByTipo(Constantes.TIPO_BASICO);
-						usuario = new Usuario(nombreUsuario, contraseña, nombre, apellidos, correo, null);
-
-						rolBasico.getUsuarios().add(usuario);
-						usuario.getRoles().add(rolBasico);
-
-						Email email = new Email();
-						StringBuilder cuerpoMensaje = email.crearMensajeValidacion(usuario);
-
-						if (email.enviarCorreo(usuario.getCorreo(), "Registro usuario", cuerpoMensaje.toString())) {
-
-							usuario.setContraseña(Utilidades.codificarContraseña(contraseña));
-							repositorioUsuarios.save(usuario);
-							repositorioRoles.save(rolBasico);
-
-							model.addAttribute("mensajeOk", String.format(Constantes.REGISTRO_OK, usuario.getCorreo()));
-
-						} else {
-							model.addAttribute(Constantes.MODEL_ATT_ERROR, "Enviar correo");
-							model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, Constantes.ERROR_REGISTRO);
-							return Constantes.TEMPLATE_PAGINA_ERROR;
-						}
-
-					} else {
-						model.addAttribute(Constantes.MODEL_ATT_MSG_ERROR, Constantes.ERROR_REGISTRO_CONFIRMACION_CONTRASENA);
-					}
+				if(!Utilidades.validarFormatoCorreo(correo)) {
+					model.addAttribute(Constantes.MODEL_ATT_MSG_ERROR, Constantes.ERROR_EMAIL_ADDRESS);
+				}
+				else if(!contrasena.equals(confirmacionContrasena)) {
+					model.addAttribute(Constantes.MODEL_ATT_MSG_ERROR, Constantes.ERROR_REGISTRO_CONFIRMACION_CONTRASENA);
+				}
+				else if(!enviarSolicitudRegistro(nombreUsuario, contrasena, nombre, apellidos, correo)) {			
+					return Utilidades.logErrorAndGetPageError(null, null, model, "Enviar Correo", Constantes.ERROR_REGISTRO);
 				}
 				else {
-					model.addAttribute(Constantes.MODEL_ATT_MSG_ERROR, Constantes.ERROR_EMAIL_ADDRESS);
+					model.addAttribute("mensajeOk", String.format(Constantes.REGISTRO_OK, correo));
 				}
 
 			} else {
@@ -193,17 +173,33 @@ public class UsuarioController {
 
 			return "RegistroUsuario";
 		} catch (Exception ex) {
-			logger.error(String.format("Registro de usuario%n%s", Utilidades.formatedExceptionMessage(ex)));
-
-			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Registro");
-			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al intentar registrar un nuevo usuario"
-					+ Constantes.CONTACT_WITH_ADMIN);
-
-			return Constantes.TEMPLATE_PAGINA_ERROR;
+			
+			return Utilidades.logErrorAndGetPageError(ex, "registrarUsuario", model, "Registro", "Se ha producido un error al intentar registrar un nuevo usuario" + Constantes.CONTACT_WITH_ADMIN);
 		}
 
 	}
+	
+	private boolean enviarSolicitudRegistro(String nombreUsuario, String contrasena, String nombre, String apellidos, String correo) throws NoSuchAlgorithmException {
+		
+		Rol rolBasico = repositorioRoles.findByTipo(Constantes.TIPO_BASICO);
+		Usuario usuario = new Usuario(nombreUsuario, contrasena, nombre, apellidos, correo, null);
 
+		rolBasico.getUsuarios().add(usuario);
+		usuario.getRoles().add(rolBasico);
+
+		Email email = new Email();
+		StringBuilder cuerpoMensaje = email.crearMensajeValidacion(usuario);
+		
+		boolean enviado = email.enviarCorreo(usuario.getCorreo(), "Registro usuario", cuerpoMensaje.toString());
+		if (enviado) {
+
+			usuario.setContraseña(Utilidades.codificarContraseña(contrasena));
+			repositorioUsuarios.save(usuario);
+			repositorioRoles.save(rolBasico);
+		}
+		
+		return enviado;
+	}
 	@RequestMapping(value = "/ActivarCuentaUsuario", method = RequestMethod.GET)
 	public String activarCuenta(@RequestParam("usuario") String nombreUsuario, Model model) {
 
@@ -239,21 +235,11 @@ public class UsuarioController {
 				mensaje = "Error de activacion de cuenta";
 				descripcion = "No existe el usuario '" + nombreUsuario + "'.";
 			}
-
-			logger.error(String.format("Activar cuenta: %s", descripcion));
-
-			model.addAttribute(Constantes.MODEL_ATT_ERROR, mensaje);
-			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, descripcion);
-
-			return Constantes.TEMPLATE_PAGINA_ERROR;
+			
+			return Utilidades.logErrorAndGetPageError(null, "activarCuetna", model, mensaje, descripcion);
 		} catch (Exception ex) {
-			logger.error(String.format("ActivarCuentaUsuario%n%s", Utilidades.formatedExceptionMessage(ex)));
-
-			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Activacion de cuenta");
-			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al intentar activar su cuenta de usuario"
-					+ Constantes.CONTACT_WITH_ADMIN);
-
-			return Constantes.TEMPLATE_PAGINA_ERROR;
+			
+			return Utilidades.logErrorAndGetPageError(ex, "activarCuenta", model, "Activacion de cuenta", "Se ha producido un error al intentar activar su cuenta de usuario" + Constantes.CONTACT_WITH_ADMIN);
 		}
 
 	}
@@ -275,12 +261,12 @@ public class UsuarioController {
 
 				} else {
 					Email email = new Email();
-					String nuevaContraseña = Utilidades.generarNuevaContraseñaAleatoria();
-					usuario.setContraseña(nuevaContraseña);
+					String nuevaContrasena = Utilidades.generarNuevaContraseñaAleatoria();
+					usuario.setContraseña(nuevaContrasena);
 					StringBuilder cuerpoMensaje = email.crearMensajeRecuperacion(usuario);
 
 					if (email.enviarCorreo(usuario.getCorreo(), "Recuperacion cuenta", cuerpoMensaje.toString())) {
-						usuario.setContraseña(Utilidades.codificarContraseña(nuevaContraseña));
+						usuario.setContraseña(Utilidades.codificarContraseña(nuevaContrasena));
 						usuario.setIntentos(Constantes.NUMEROINTENTOSLOGIN);
 						usuario.setBloqueado(false);
 
@@ -302,14 +288,7 @@ public class UsuarioController {
 
 			return "RecuperarCuenta";
 		} catch (Exception ex) {
-			logger.error(String.format("RecordarCuenta%n%s", Utilidades.formatedExceptionMessage(ex)));
-
-			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Recordar cuenta");
-			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION,
-					"Se ha producido un error al intentar devolver los datos de su cuenta de usuario"
-							+ Constantes.CONTACT_WITH_ADMIN);
-
-			return Constantes.TEMPLATE_PAGINA_ERROR;
+			return Utilidades.logErrorAndGetPageError(ex, "recuperarCuenta", model, "Recordar cuenta", "Se ha producido un error al intentar devolver los datos de su cuenta de usuario" + Constantes.CONTACT_WITH_ADMIN);
 		}
 
 	}
@@ -369,21 +348,15 @@ public class UsuarioController {
 			return "PaginaOk";
 
 		} catch (Exception ex) {
-			logger.error(String.format("Comentario%n%s", Utilidades.formatedExceptionMessage(ex)));
-
-			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Clasifiacion de comentario");
-			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al intentar gestionar el comentario."
-					+ "Compruebe los registros de error.");
-
-			return Constantes.TEMPLATE_PAGINA_ERROR;
+			return Utilidades.logErrorAndGetPageError(ex, "gestionarComentario", model, "Clasificacion de comentario", "Se ha producido un error al intentar gestionar el comentario. Compruebe los registros de error.");
 		}
 
 	}
 
 	@RequestMapping(value = "/CambiarPassword", method = RequestMethod.POST)
-	public String cambiarPassword(@RequestParam("currentPassword") String contraseñaActual,
-			@RequestParam("newPassword") String nuevaContraseña,
-			@RequestParam("confirmPassword") String confirmacionContraseña, HttpServletRequest httpRequest,
+	public String cambiarPassword(@RequestParam("currentPassword") String contrasenaActual,
+			@RequestParam("newPassword") String nuevaContrasena,
+			@RequestParam("confirmPassword") String confirmacionContrasena, HttpServletRequest httpRequest,
 			HttpServletResponse httpResponse, Model model) throws NoSuchAlgorithmException {
 
 		try {
@@ -393,29 +366,23 @@ public class UsuarioController {
 				String nombre = (String) session.getAttribute("user");
 				Usuario usuario = repositorioUsuarios.findByUsuario(nombre);
 				if (usuario != null) {
-					if (Utilidades.comprobarContraseña(contraseñaActual, usuario.getContraseña())) {
-						if (nuevaContraseña.equals(confirmacionContraseña)) {
-							String nuevaContraseñaSegura = Utilidades.codificarContraseña(nuevaContraseña);
-
-							usuario.setContraseña(nuevaContraseñaSegura);
-							repositorioUsuarios.save(usuario);
-
-							model.addAttribute("cambiarPasswordOk", "La contraseña se cambio correctamente");
-						} else {
-							model.addAttribute("errorPasswordConfirm", "Error al confirmar nueva contraseña.");
-						}
-					} else {
+					if(!Utilidades.comprobarContraseña(contrasenaActual, usuario.getContraseña())) {
 						model.addAttribute("errorPasswordActual", "La contraseña actual es erronea");
 					}
-					String tipoUsuario = usuario.getRoles().contains(repositorioRoles.findByTipo(Constantes.TIPO_ADMINISTRADOR)) ? Constantes.TIPO_ADMINISTRADOR : Constantes.TIPO_BASICO;
+					else if(!nuevaContrasena.equals(confirmacionContrasena)) {
+						model.addAttribute("errorPasswordConfirm", "Error al confirmar nueva contraseña.");
+					}
+					else{
+						String nuevaContrasenaSegura = Utilidades.codificarContraseña(nuevaContrasena);
 
-					model.addAttribute(Constantes.MODEL_ATT_NOMBRE, String.format("%s %s", usuario.getNombre(), usuario.getApellidos()));
-					model.addAttribute(Constantes.MODEL_ATT_NOMBRE_USUARIO, usuario.getUsuario());
-					model.addAttribute(Constantes.MODEL_ATT_CORREO, usuario.getCorreo());
-					model.addAttribute(Constantes.MODEL_ATT_FECHA_REGISTRO, usuario.getFechaCreacion());
-					model.addAttribute(Constantes.MODEL_ATT_TIPO_USUARIO, tipoUsuario);
+						usuario.setContraseña(nuevaContrasenaSegura);
+						repositorioUsuarios.save(usuario);
 
+						model.addAttribute("cambiarPasswordOk", "La contraseña se cambio correctamente");
+					}
 
+					crearModeloPerfil(model, usuario);
+					
 					return Constantes.TEMPLATE_PERFIL;
 				}
 				
@@ -423,16 +390,21 @@ public class UsuarioController {
 
 			return "redirect:/login";
 		} catch (Exception ex) {
-			logger.error(String.format("CambiarPassword%n%s", Utilidades.formatedExceptionMessage(ex)));
-
-			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Cambiar Contraseña");
-			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al cambiar la contraseña."
-					+ "Pongase en contacto con el administrasdor.");
-
-			return Constantes.TEMPLATE_PAGINA_ERROR;
+			return Utilidades.logErrorAndGetPageError(ex, "cambiarPassword", model, "Cambiar Contraseña", "Se ha producido un error al cambiar la contraseña. Pongase en contacto con el administrasdor.");
 		}
 
 	}
+	
+	private void crearModeloPerfil(Model model, Usuario usuario) {
+		String tipoUsuario = usuario.getRoles().contains(repositorioRoles.findByTipo(Constantes.TIPO_ADMINISTRADOR)) ? Constantes.TIPO_ADMINISTRADOR : Constantes.TIPO_BASICO;
+
+		model.addAttribute(Constantes.MODEL_ATT_NOMBRE, String.format("%s %s", usuario.getNombre(), usuario.getApellidos()));
+		model.addAttribute(Constantes.MODEL_ATT_NOMBRE_USUARIO, usuario.getUsuario());
+		model.addAttribute(Constantes.MODEL_ATT_CORREO, usuario.getCorreo());
+		model.addAttribute(Constantes.MODEL_ATT_FECHA_REGISTRO, usuario.getFechaCreacion());
+		model.addAttribute(Constantes.MODEL_ATT_TIPO_USUARIO, tipoUsuario);
+	}
+	
 
 	@RequestMapping(value = "/CambiarCorreo", method = RequestMethod.POST)
 	public String cambiarCorreo(@RequestParam("email") String nuevoCorreo,
@@ -462,13 +434,7 @@ public class UsuarioController {
 						}
 
 					}
-					String tipoUsuario = usuario.getRoles().contains(repositorioRoles.findByTipo(Constantes.TIPO_ADMINISTRADOR)) ? Constantes.TIPO_ADMINISTRADOR : Constantes.TIPO_BASICO;
-
-					model.addAttribute(Constantes.MODEL_ATT_NOMBRE, String.format("%s %s", usuario.getNombre(), usuario.getApellidos()));
-					model.addAttribute(Constantes.MODEL_ATT_NOMBRE_USUARIO, usuario.getUsuario());
-					model.addAttribute(Constantes.MODEL_ATT_CORREO, usuario.getCorreo());
-					model.addAttribute(Constantes.MODEL_ATT_FECHA_REGISTRO, usuario.getFechaCreacion());
-					model.addAttribute(Constantes.MODEL_ATT_TIPO_USUARIO, tipoUsuario);
+					crearModeloPerfil(model, usuario);
 					
 					return Constantes.TEMPLATE_PERFIL;
 				}
@@ -477,13 +443,7 @@ public class UsuarioController {
 
 			return "redirect:/login";
 		} catch (Exception ex) {
-			logger.error(String.format("CambiarCorreo%n%s", Utilidades.formatedExceptionMessage(ex)));
-
-			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Cambiar direccion de correo electronico");
-			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al cambiar la direccion de correo."
-					+ "Vuelva a intentarlo mas tarde o pongase en contacto con el administrasdor.");
-
-			return Constantes.TEMPLATE_PAGINA_ERROR;
+			return Utilidades.logErrorAndGetPageError(ex, "cambiarCorreo", model, "Cambiar direccion de correo", "Se ha producido un error al cambiar la direccion de correo. Vuelva a intentarlo mas tarde o pongase en contacto con el administrasdor.");
 		}
 
 	}
@@ -512,14 +472,8 @@ public class UsuarioController {
 			Utilidades.noCachearRespuestaHTTP(httpResponse);
 			HttpSession session = httpRequest.getSession(false);
 			if(session != null) {
-				String tipoUsuario = usuario.getRoles().contains(repositorioRoles.findByTipo(Constantes.TIPO_ADMINISTRADOR)) ? Constantes.TIPO_ADMINISTRADOR : Constantes.TIPO_BASICO;
 				model.addAttribute("cambiarCorreoOk", Constantes.CHANGE_EMAIL_ADDRESS_CONFIRM_OK);
-				model.addAttribute(Constantes.MODEL_ATT_NOMBRE, String.format("%s %s", usuario.getNombre(), usuario.getApellidos()));
-				model.addAttribute(Constantes.MODEL_ATT_NOMBRE_USUARIO, usuario.getUsuario());
-				model.addAttribute(Constantes.MODEL_ATT_CORREO, usuario.getCorreo());
-				model.addAttribute(Constantes.MODEL_ATT_FECHA_REGISTRO, usuario.getFechaCreacion());
-				model.addAttribute(Constantes.MODEL_ATT_TIPO_USUARIO, tipoUsuario);
-
+				crearModeloPerfil(model, usuario);
 	
 				return Constantes.TEMPLATE_PERFIL;
 				
@@ -530,13 +484,8 @@ public class UsuarioController {
 			return "login";			
 		}
 		catch(Exception ex) {
-			logger.error(String.format("confirmarCmbioCorreo%n%s", Utilidades.formatedExceptionMessage(ex)));
-
-			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Confirmar cambio de direccion de correo electronico");
-			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al cambiar la direccion de correo."
-					+ "Vuelva a intentarlo mas tarde o pongase en contacto con el administrasdor.");
-
-			return Constantes.TEMPLATE_PAGINA_ERROR;
+			return Utilidades.logErrorAndGetPageError(ex, "confirmarCambioCorreo", model, "Confirmar cambio de direccion de correo electronico",
+												"Se ha producido un error al cambiar la direccion de correo. Vuelva a intentarlo mas tarde o pongase en contacto con el administrasdor.");
 		}
 	}
 

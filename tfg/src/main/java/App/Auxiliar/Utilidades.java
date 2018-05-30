@@ -18,11 +18,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.log4j.Logger;
+import org.springframework.ui.Model;
 
 import App.Model.Genero;
 import App.Model.Serie;
 
 public class Utilidades {
+	private static Logger logger = Logger.getLogger("file");
 	private Utilidades() {
 		
 	}
@@ -177,6 +180,19 @@ public class Utilidades {
 		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 		Date today = Calendar.getInstance().getTime();
 		return dateFormat.format(today);
+	}
+	
+	public static final String logErrorAndGetPageError(Exception ex, String nameMethod,  Model model, String error, String descripcion) {
+		if(ex != null && nameMethod != null) {
+			logger.error(String.format("%s%n%s", nameMethod, formatedExceptionMessage(ex)));
+		}
+		else if(ex == null){
+			logger.error(String.format("%s%n%s", nameMethod, descripcion));
+		}
+
+		model.addAttribute(Constantes.MODEL_ATT_ERROR, error);
+		model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, descripcion);
+		return Constantes.TEMPLATE_PAGINA_ERROR;
 	}
 	
 

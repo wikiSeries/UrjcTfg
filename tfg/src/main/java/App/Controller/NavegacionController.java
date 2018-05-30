@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -36,9 +35,7 @@ import App.Repository.RepositorioUsuario;
 
 @Controller
 public class NavegacionController {
-	
-	private Logger logger = Logger.getLogger("file");
-	
+		
 	@Autowired
 	private RepositorioUsuario repositorioUsuarios;
 	
@@ -101,25 +98,9 @@ public class NavegacionController {
 				PageRequest pageRequest = new PageRequest(pagina - 1, Constantes.NUMERO_SERIES_PAGINA, Sort.Direction.ASC, "id");
 				Page<Serie> page = repositorioSeries.findAll(pageRequest);
 				
-				int paginaActual = page.getNumber() + 1;
-				int paginaAnterior = paginaActual - 1;
-				int paginaSiguiente = paginaActual + 1;
-				
-				int [] indices = new int[page.getTotalPages()];
-				for(int i = 0; i < indices.length; i++) {
-					indices[i] = i + 1;
-				}
-				
+				crearModeloPaginaPrincipal(model, nombre, page);
 				boolean esAdministrador = repositorioUsuarios.findByUsuario(nombre).getRoles().contains(repositorioRoles.findByTipo(Constantes.TIPO_ADMINISTRADOR));
-				
-				model.addAttribute(Constantes.MODEL_ATT_NOMBRE_USUARIO, nombre);
-				model.addAttribute(Constantes.MODEL_ATT_CURRENT_PAG, paginaActual);
-				model.addAttribute(Constantes.MODEL_ATT_SERIES, page);
-				model.addAttribute(Constantes.MODEL_ATT_INDICES_PAG, indices);
-				model.addAttribute(Constantes.MODEL_ATT_PREV_PAG, paginaAnterior);
-				model.addAttribute(Constantes.MODEL_ATT_NEXT_PAG, paginaSiguiente);
 				model.addAttribute("esAdministrador", esAdministrador);
-				
 				
 				UtilidadesLista<Genero> utilList = new UtilidadesLista<Genero>();
 				model.addAttribute("filtroGeneros", utilList.dividirListaPorNumeroDeSubListas(repositorioGeneros.findAll(), Constantes.NUMERO_PARTICION_LISTA_GENEROS));
@@ -139,14 +120,26 @@ public class NavegacionController {
 			return Constantes.REDIRECT_LOGIN;
 		}
 		catch(Exception ex) {
-			logger.error(String.format("Pagina Principal%n%s", Utilidades.formatedExceptionMessage(ex)));
-			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Pagina Principal");
-			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al cargar la pagina principal."
-								+ Constantes.CONTACT_WITH_ADMIN);
-			return Constantes.TEMPLATE_PAGINA_ERROR;
+			return Utilidades.logErrorAndGetPageError(ex, "getPaginaPrincipal", model, "Pagina principal", "Se ha producido un error al cargar la pagina principal." + Constantes.CONTACT_WITH_ADMIN);
+		}
+	}
+	
+	private void crearModeloPaginaPrincipal(Model model, String nombreUsuario, Page page) {
+		int paginaActual = page.getNumber() + 1;
+		int paginaAnterior = paginaActual - 1;
+		int paginaSiguiente = paginaActual + 1;
+		
+		int [] indices = new int[page.getTotalPages()];
+		for(int i = 0; i < indices.length; i++) {
+			indices[i] = i + 1;
 		}
 		
-		
+		model.addAttribute(Constantes.MODEL_ATT_NOMBRE_USUARIO, nombreUsuario);
+		model.addAttribute(Constantes.MODEL_ATT_CURRENT_PAG, paginaActual);
+		model.addAttribute(Constantes.MODEL_ATT_SERIES, page);
+		model.addAttribute(Constantes.MODEL_ATT_INDICES_PAG, indices);
+		model.addAttribute(Constantes.MODEL_ATT_PREV_PAG, paginaAnterior);
+		model.addAttribute(Constantes.MODEL_ATT_NEXT_PAG, paginaSiguiente);
 	}
 	
 	@RequestMapping(value = "/Genero/{genero}/{pagina}", method = RequestMethod.GET)
@@ -166,26 +159,13 @@ public class NavegacionController {
 				int end = (start + pageRequest.getPageSize()) > series.size() ? series.size() : (start + pageRequest.getPageSize());
 				
 				Page<Serie> pages = new PageImpl<Serie>(series.subList(start, end), pageRequest, series.size());
+
+				crearModeloPaginaPrincipal(model, nombre, pages);
 				
-				int paginaActual = pages.getNumber() + 1;
-				int paginaAnterior = paginaActual - 1;
-				int paginaSiguiente = paginaActual + 1;
-				
-				int [] indices = new int[pages.getTotalPages()];
-				for(int i = 0; i < indices.length; i++) {
-					indices[i] = i + 1;
-				}
-				
-				String urlPaginacion = String.format("/Genero/%s", genero);
-				
-				model.addAttribute(Constantes.MODEL_ATT_CURRENT_PAG, paginaActual);
-				model.addAttribute(Constantes.MODEL_ATT_SERIES, pages);
-				model.addAttribute(Constantes.MODEL_ATT_INDICES_PAG, indices);
-				model.addAttribute(Constantes.MODEL_ATT_PREV_PAG, paginaAnterior);
-				model.addAttribute(Constantes.MODEL_ATT_NEXT_PAG, paginaSiguiente);
 				model.addAttribute("filtro", genero);
 				model.addAttribute("tipoFiltro", "filtrar");
-				model.addAttribute(Constantes.MODEL_ATT_NOMBRE_USUARIO, nombre);
+				
+				String urlPaginacion = String.format("/Genero/%s", genero);
 				model.addAttribute("urlPaginacion",  urlPaginacion);
 				
 				return "FiltroGenero";
@@ -195,14 +175,8 @@ public class NavegacionController {
 			return  Constantes.REDIRECT_LOGIN;
 		}
 		catch(Exception ex) {
-			logger.error(String.format("Genero%n%s", Utilidades.formatedExceptionMessage(ex)));
-			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Filtrar por genero");
-			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al filtrar las series por el genero."
-								+ Constantes.CONTACT_WITH_ADMIN);
-			return Constantes.TEMPLATE_PAGINA_ERROR;
-		}
-		
-		
+			return Utilidades.logErrorAndGetPageError(ex, "filtroGenero", model, "Filtrar por genero", "Se ha producido un error al filtrar las series por el genero." + Constantes.CONTACT_WITH_ADMIN);
+		}	
 	}
 	
 	@RequestMapping(value = "/BuscarTitulo/{titulo}/{pagina}", method = RequestMethod.GET)
@@ -218,24 +192,10 @@ public class NavegacionController {
 				
 				Page<Serie> pages = repositorioSeries.findByTituloContaining(titulo, pageRequest);
 				String urlPaginacion = String.format("/BuscarTitulo/%s", titulo);	
-					
-				int paginaActual = pages.getNumber() + 1;
-				int paginaAnterior = paginaActual - 1;
-				int paginaSiguiente = paginaActual + 1;
 				
-				int [] indices = new int[pages.getTotalPages()];
-				for(int i = 0; i < indices.length; i++) {
-					indices[i] = i + 1;
-				}
-				
-				model.addAttribute(Constantes.MODEL_ATT_CURRENT_PAG, paginaActual);
-				model.addAttribute(Constantes.MODEL_ATT_SERIES, pages);
-				model.addAttribute(Constantes.MODEL_ATT_INDICES_PAG, indices);
-				model.addAttribute(Constantes.MODEL_ATT_PREV_PAG, paginaAnterior);
-				model.addAttribute(Constantes.MODEL_ATT_NEXT_PAG, paginaSiguiente);
+				crearModeloPaginaPrincipal(model, nombre, pages);
 				model.addAttribute("filtro", titulo);
 				model.addAttribute("tipoFiltro", "buscar");
-				model.addAttribute(Constantes.MODEL_ATT_NOMBRE_USUARIO, nombre);
 				model.addAttribute("urlPaginacion", urlPaginacion);
 				
 				return "FiltroGenero";
@@ -244,13 +204,8 @@ public class NavegacionController {
 			return Constantes.REDIRECT_LOGIN;
 		}
 		catch(Exception ex) {
-			logger.error(String.format("BuscarTitulo%n%s", Utilidades.formatedExceptionMessage(ex)));
-			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Buscar serie por titulo");
-			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al buscar la serie por el su titulo."
-								+ Constantes.CONTACT_WITH_ADMIN);
-			return Constantes.TEMPLATE_PAGINA_ERROR;
-		}
-		
+			return Utilidades.logErrorAndGetPageError(ex, "buscarTitulo", model, "Buscar serie por titulo", "Se ha producido un error al buscar la serie por el su titulo." + Constantes.CONTACT_WITH_ADMIN);
+		}	
 	}
 	
 	@RequestMapping(value = "/BusquedaAvanzada", method = RequestMethod.GET)
@@ -279,11 +234,7 @@ public class NavegacionController {
 			return Constantes.REDIRECT_LOGIN;
 		}
 		catch(Exception ex) {
-			logger.error(String.format("BusquedaAvanzada%n%s", Utilidades.formatedExceptionMessage(ex)));
-			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Busqueza avanzada");
-			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al utilizar la busqueda avanzada."
-								+ Constantes.CONTACT_WITH_ADMIN);
-			return Constantes.TEMPLATE_PAGINA_ERROR;
+			return Utilidades.logErrorAndGetPageError(ex, "getBusquedaAvanzada", model, "Busqueda avanzada", "Se ha producido un error al utilizar la busqueda avanzada." + Constantes.CONTACT_WITH_ADMIN);			
 		}
 		
 		
@@ -297,14 +248,8 @@ public class NavegacionController {
 			if(session != null) {
 				String nombre = (String) session.getAttribute("user");
 				Usuario usuario = repositorioUsuarios.findByUsuario(nombre);
-				String tipoUsuario = usuario.getRoles().contains(repositorioRoles.findByTipo(Constantes.TIPO_ADMINISTRADOR)) ? Constantes.TIPO_ADMINISTRADOR : Constantes.TIPO_BASICO;
 				
-				model.addAttribute("nombre", String.format("%s %s", usuario.getNombre(), usuario.getApellidos()));
-				model.addAttribute(Constantes.MODEL_ATT_NOMBRE_USUARIO, usuario.getUsuario());
-				model.addAttribute("correo", usuario.getCorreo());
-				model.addAttribute("fechaRegistro", usuario.getFechaCreacion());
-				model.addAttribute("tipoUsuario", tipoUsuario);
-				
+				Utilidades.crearModeloPerfil(model, usuario, repositorioRoles.findByTipo(Constantes.TIPO_ADMINISTRADOR));				
 				return "Perfil";
 				
 			}
@@ -312,11 +257,7 @@ public class NavegacionController {
 			return Constantes.REDIRECT_LOGIN;
 		}
 		catch(Exception ex) {
-			logger.error(String.format("Perfil%n%s", Utilidades.formatedExceptionMessage(ex)));
-			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Mi perfil");
-			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al acceder a su perfil."
-								+ Constantes.CONTACT_WITH_ADMIN);
-			return Constantes.TEMPLATE_PAGINA_ERROR;
+			return Utilidades.logErrorAndGetPageError(ex, "perfil", model, "Mi perfil", "Se ha producido un error al acceder a su perfil." + Constantes.CONTACT_WITH_ADMIN);
 		}
 		
 	}
@@ -365,11 +306,7 @@ public class NavegacionController {
 			return Constantes.REDIRECT_LOGIN;
 		}
 		catch(Exception ex) {
-			logger.error(String.format("FichaInterprete%n%s", Utilidades.formatedExceptionMessage(ex)));
-			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Ficha interprete");
-			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido al cargar la informacion del interprete seleccionado."
-								+ Constantes.CONTACT_WITH_ADMIN);
-			return Constantes.TEMPLATE_PAGINA_ERROR;
+			return Utilidades.logErrorAndGetPageError(ex, "infoInterprete", model, "Ficha interprete", "Se ha producido al cargar la informacion del interprete seleccionado." + Constantes.CONTACT_WITH_ADMIN);
 		}
 		
 	}

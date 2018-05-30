@@ -381,7 +381,7 @@ public class UsuarioController {
 						model.addAttribute("cambiarPasswordOk", "La contraseña se cambio correctamente");
 					}
 
-					crearModeloPerfil(model, usuario);
+					Utilidades.crearModeloPerfil(model, usuario, repositorioRoles.findByTipo(Constantes.TIPO_ADMINISTRADOR));
 					
 					return Constantes.TEMPLATE_PERFIL;
 				}
@@ -394,21 +394,10 @@ public class UsuarioController {
 		}
 
 	}
-	
-	private void crearModeloPerfil(Model model, Usuario usuario) {
-		String tipoUsuario = usuario.getRoles().contains(repositorioRoles.findByTipo(Constantes.TIPO_ADMINISTRADOR)) ? Constantes.TIPO_ADMINISTRADOR : Constantes.TIPO_BASICO;
-
-		model.addAttribute(Constantes.MODEL_ATT_NOMBRE, String.format("%s %s", usuario.getNombre(), usuario.getApellidos()));
-		model.addAttribute(Constantes.MODEL_ATT_NOMBRE_USUARIO, usuario.getUsuario());
-		model.addAttribute(Constantes.MODEL_ATT_CORREO, usuario.getCorreo());
-		model.addAttribute(Constantes.MODEL_ATT_FECHA_REGISTRO, usuario.getFechaCreacion());
-		model.addAttribute(Constantes.MODEL_ATT_TIPO_USUARIO, tipoUsuario);
-	}
-	
 
 	@RequestMapping(value = "/CambiarCorreo", method = RequestMethod.POST)
 	public String cambiarCorreo(@RequestParam("email") String nuevoCorreo,
-			@RequestParam("currentPassword") String contraseña, HttpServletRequest httpRequest,
+			@RequestParam("currentPassword") String contrasena, HttpServletRequest httpRequest,
 			HttpServletResponse httpResponse, Model model) throws NoSuchAlgorithmException {
 
 		try {
@@ -418,7 +407,7 @@ public class UsuarioController {
 				String nombre = (String) session.getAttribute("user");
 				Usuario usuario = repositorioUsuarios.findByUsuario(nombre);
 				if (usuario != null) {
-					if (!Utilidades.comprobarContraseña(contraseña, usuario.getContraseña())) {
+					if (!Utilidades.comprobarContraseña(contrasena, usuario.getContraseña())) {
 						model.addAttribute("errorPasswordCorreo", Constantes.ERROR_CONTRASENA);
 					} else if (!Utilidades.validarFormatoCorreo(nuevoCorreo)) {
 						model.addAttribute("errorNuevoCorreo", Constantes.ERROR_EMAIL_ADDRESS);
@@ -434,7 +423,8 @@ public class UsuarioController {
 						}
 
 					}
-					crearModeloPerfil(model, usuario);
+					
+					Utilidades.crearModeloPerfil(model, usuario, repositorioRoles.findByTipo(Constantes.TIPO_ADMINISTRADOR));
 					
 					return Constantes.TEMPLATE_PERFIL;
 				}
@@ -473,7 +463,7 @@ public class UsuarioController {
 			HttpSession session = httpRequest.getSession(false);
 			if(session != null) {
 				model.addAttribute("cambiarCorreoOk", Constantes.CHANGE_EMAIL_ADDRESS_CONFIRM_OK);
-				crearModeloPerfil(model, usuario);
+				Utilidades.crearModeloPerfil(model, usuario, repositorioRoles.findByTipo(Constantes.TIPO_ADMINISTRADOR));
 	
 				return Constantes.TEMPLATE_PERFIL;
 				

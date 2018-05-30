@@ -22,7 +22,9 @@ import org.apache.log4j.Logger;
 import org.springframework.ui.Model;
 
 import App.Model.Genero;
+import App.Model.Rol;
 import App.Model.Serie;
+import App.Model.Usuario;
 
 public class Utilidades {
 	private static Logger logger = Logger.getLogger("file");
@@ -193,6 +195,15 @@ public class Utilidades {
 		model.addAttribute(Constantes.MODEL_ATT_ERROR, error);
 		model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, descripcion);
 		return Constantes.TEMPLATE_PAGINA_ERROR;
+	}
+	
+	public static final void crearModeloPerfil(Model model, Usuario usuario, Rol rolAdmin) {
+		String tipoUsuario = usuario.getRoles().contains(rolAdmin) ? Constantes.TIPO_ADMINISTRADOR : Constantes.TIPO_BASICO;
+		model.addAttribute(Constantes.MODEL_ATT_NOMBRE, String.format("%s %s", usuario.getNombre(), usuario.getApellidos()));
+		model.addAttribute(Constantes.MODEL_ATT_NOMBRE_USUARIO, usuario.getUsuario());
+		model.addAttribute(Constantes.MODEL_ATT_CORREO, usuario.getCorreo());
+		model.addAttribute(Constantes.MODEL_ATT_FECHA_REGISTRO, usuario.getFechaCreacion());
+		model.addAttribute(Constantes.MODEL_ATT_TIPO_USUARIO, tipoUsuario);
 	}
 	
 

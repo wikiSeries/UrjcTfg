@@ -141,10 +141,10 @@ public class Temporada {
 		this.setNumero(temporadaApi.getNumber());
 		this.setEstreno(temporadaApi.getPremiereDate());
 		this.setFinEstreno(temporadaApi.getEndDate());
-		String canalTv = temporadaApi.getNetwork() != null ? temporadaApi.getNetwork().getName() : "";
-		this.setCanalTv(canalTv);
-		String canalWeb = temporadaApi.getWebChannel() != null ? temporadaApi.getWebChannel().getName() : "";
-		this.setCanalWeb(canalWeb);
+		String canalTvToSet = temporadaApi.getNetwork() != null ? temporadaApi.getNetwork().getName() : "";
+		this.setCanalTv(canalTvToSet);
+		String canalWebToSet = temporadaApi.getWebChannel() != null ? temporadaApi.getWebChannel().getName() : "";
+		this.setCanalWeb(canalWebToSet);
 		
 	}
 }

@@ -163,8 +163,8 @@ public class Episodio {
 		this.setNumero(episodioApi.getNumber());
 		this.setEstreno(episodioApi.getAirdate());
 		this.setDuracion(episodioApi.getRuntime());
-		String descripcion = episodioApi.getSummary().length() > Constantes.NUMERO_LIMITE_COLUMNA_TEXTO ? episodioApi.getSummary().substring(0,  Constantes.NUMERO_LIMITE_COLUMNA_TEXTO - Constantes.FINAL_PARRAFO.length()) + Constantes.FINAL_PARRAFO : episodioApi.getSummary();
-		this.setDescripcion(descripcion);
+		String descripcionSet = episodioApi.getSummary().length() > Constantes.NUMERO_LIMITE_COLUMNA_TEXTO ? episodioApi.getSummary().substring(0,  Constantes.NUMERO_LIMITE_COLUMNA_TEXTO - Constantes.FINAL_PARRAFO.length()) + Constantes.FINAL_PARRAFO : episodioApi.getSummary();
+		this.setDescripcion(descripcionSet);
 	}
 	
 	

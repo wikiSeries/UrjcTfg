@@ -79,15 +79,15 @@ public class SerieController {
 				return "FichaSerie";
 				
 			}		
-			return "redirect:/login";
+			return Constantes.REDIRECT_LOGIN;
 		}
 		catch(Exception ex) {
 			logger.error(String.format("InfoSerie%n%s", Utilidades.formatedExceptionMessage(ex)));	
-			model.addAttribute("error", "Informacion de la serie");
-			model.addAttribute("descripcion", "Se ha producido un error al obtener la informacion de la serie."
-					+ "Vuelva a intentarlo mas tarde o pongase en contacto con el administrasdor.");
+			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Informacion de la serie");
+			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al obtener la informacion de la serie."
+					+ Constantes.CONTACT_WITH_ADMIN);
 			
-			return "PaginaError";		
+			return Constantes.TEMPLATE_PAGINA_ERROR;		
 		}
 		
 	}
@@ -113,27 +113,27 @@ public class SerieController {
 				}
 				
 				model.addAttribute("paginaActual", paginaActual);
-				model.addAttribute("series", pages);
+				model.addAttribute(Constantes.MODEL_ATT_SERIES, pages);
 				model.addAttribute("indices", indices);
 				model.addAttribute("paginaAnterior", paginaAnterior);
 				model.addAttribute("paginaSiguiente", paginaSiguiente);
 				model.addAttribute("filtro", titulo);
 				model.addAttribute("tipoFiltro", "buscar");
-				model.addAttribute("nombreUsuario", nombre);
+				model.addAttribute(Constantes.MODEL_ATT_NOMBRE_USUARIO, nombre);
 				model.addAttribute("urlPaginacion", urlPaginacion);
 				
 				return "FiltroGenero";
 			}
 			
-			return "redirect:/login";
+			return Constantes.REDIRECT_LOGIN;
 		}
 		catch(Exception ex) {
 			logger.error(String.format("BuscarTtitulo%n%s", Utilidades.formatedExceptionMessage(ex)));	
-			model.addAttribute("error", "Buscar serie por titulo");
-			model.addAttribute("descripcion", "Se ha producido un error al realizar la busqueda por titulo."
-					+ "Vuelva a intentarlo mas tarde o pongase en contacto con el administrasdor.");
+			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Buscar serie por titulo");
+			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al realizar la busqueda por titulo."
+					+ Constantes.CONTACT_WITH_ADMIN);
 			
-			return "PaginaError";	
+			return Constantes.TEMPLATE_PAGINA_ERROR;	
 		}
 		
 	}
@@ -166,7 +166,7 @@ public class SerieController {
 					series = query.getResultList();
 				}
 				
-				model.addAttribute("nombreUsuario", nombre);
+				model.addAttribute(Constantes.MODEL_ATT_NOMBRE_USUARIO, nombre);
 				model.addAttribute("titulo", tituloSerie);
 				model.addAttribute("nombreActor", nombreActor);
 				model.addAttribute("nombrePersonaje", nombrePersonaje);
@@ -176,20 +176,20 @@ public class SerieController {
 				model.addAttribute("ano", ano);
 				model.addAttribute("generos", generos);
 				model.addAttribute("genero", tituloGenero);
-				model.addAttribute("series", series);
+				model.addAttribute(Constantes.MODEL_ATT_SERIES, series);
 				
 				return "BusquedaAvanzada";
 			}
 			
-			return "redirect:/login";	
+			return Constantes.REDIRECT_LOGIN;	
 		}
 		catch(Exception ex) {
 			logger.error(String.format("BuscarTtitulo%n%s", Utilidades.formatedExceptionMessage(ex)));	
-			model.addAttribute("error", "Buscar serie por titulo");
-			model.addAttribute("descripcion", "Se ha producido un error al realizar la busqueda por titulo."
-					+ "Vuelva a intentarlo mas tarde o pongase en contacto con el administrasdor.");
+			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Buscar serie por titulo");
+			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al realizar la busqueda por titulo."
+					+ Constantes.CONTACT_WITH_ADMIN);
 			
-			return "PaginaError";	
+			return Constantes.TEMPLATE_PAGINA_ERROR;	
 		}
 		
 		
@@ -228,8 +228,8 @@ public class SerieController {
 		StringBuilder query = new StringBuilder();
 		query.append(Constantes.ADVANCE_SEARCH_QUERY);
 		Map <String, Boolean> control = new HashMap<String, Boolean>();
-		control.put("where", true);
-		control.put("and", false);
+		control.put(Constantes.WHERE_SQL, true);
+		control.put(Constantes.AND_SQL, false);
 		
 		construirQueryAvanzadaAux(query, control, tituloSerie, Constantes.ADVANCE_SEARCH_QUERY_TITULO);
 		construirQueryAvanzadaAux(query, control, ano, Constantes.ADVANCE_SEARCH_QUERY_ANO);
@@ -245,33 +245,33 @@ public class SerieController {
 		int [] cont = new int[2];
 		
 		if(parametro != null && !parametro.isEmpty()) {
-			if(control.get("where")) {
-				query.append(" WHERE");
-				control.put("where", false);
+			if(control.get(Constantes.WHERE_SQL)) {
+				query.append(" " + Constantes.WHERE_SQL);
+				control.put(Constantes.WHERE_SQL, false);
 			}
-			if(control.get("and")) {
-				query.append(" AND");
+			if(control.get(Constantes.AND_SQL)) {
+				query.append(" " + Constantes.AND_SQL);
 			}
 			
 			query.append(" ");
 			query.append(extensionQuery);
-			control.put("and", true);
+			control.put(Constantes.AND_SQL, true);
 		}
 		return cont;
 	}
 	private void construirQueryAvanzadaAux(StringBuilder query, Map<String, Boolean> control, int parametro, String extensionQuery) {
 		if(parametro > -1) {
-			if(control.get("where")) {
-				query.append(" WHERE");
-				control.put("where", false);
+			if(control.get(Constantes.WHERE_SQL)) {
+				query.append(" " + Constantes.WHERE_SQL);
+				control.put(Constantes.WHERE_SQL, false);
 			}
-			if(control.get("and")) {
-				query.append(" AND");
+			if(control.get(Constantes.AND_SQL)) {
+				query.append(" " + Constantes.AND_SQL);
 			}
 			
 			query.append(" ");
 			query.append(extensionQuery);
-			control.put("and", true);
+			control.put(Constantes.AND_SQL, true);
 		}
 	}
 	
@@ -285,23 +285,23 @@ public class SerieController {
 				String nombre = (String) session.getAttribute("user");
 				Usuario usuario = repositorioUsuarios.findByUsuario(nombre);
 				
-				model.addAttribute("nombreUsuario", nombre);
-				model.addAttribute("series", usuario.getSeries());
+				model.addAttribute(Constantes.MODEL_ATT_NOMBRE_USUARIO, nombre);
+				model.addAttribute(Constantes.MODEL_ATT_SERIES, usuario.getSeries());
 				model.addAttribute("pendientes", usuario.getEpisodiosPendientes());
 				model.addAttribute("vistos", usuario.getEpisodiosVistos());
 				
 				return "ListaSeries";
 			}
 			
-			return "redirect:/login";
+			return Constantes.REDIRECT_LOGIN;
 		}
 		catch(Exception ex) {
 			logger.error(String.format("MisSeries%n%s", Utilidades.formatedExceptionMessage(ex)));	
-			model.addAttribute("error", "Mis series");
-			model.addAttribute("descripcion", "Se ha producido un error al cargar sus listas de series."
-					+ "Vuelva a intentarlo mas tarde o pongase en contacto con el administrasdor.");
+			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Mis series");
+			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al cargar sus listas de series."
+					+ Constantes.CONTACT_WITH_ADMIN);
 			
-			return "PaginaError";
+			return Constantes.TEMPLATE_PAGINA_ERROR;
 		}
 		
 		
@@ -336,7 +336,7 @@ public class SerieController {
 		int puntuado = serie.getPuntuaciones().containsKey(usuario.getId()) ? 1 : 0;	
 		boolean esAdministrador = usuario.getRoles().contains(repositorioRoles.findByTipo(Constantes.TIPO_ADMINISTRADOR));
 
-		model.addAttribute("nombreUsuario", usuario.getUsuario());
+		model.addAttribute(Constantes.MODEL_ATT_NOMBRE_USUARIO, usuario.getUsuario());
 		model.addAttribute("puntuado", puntuado);
 		model.addAttribute("controlLike", usuario.getLikeSeries().get(serie.getId()));
 		model.addAttribute("esAdministrador", esAdministrador);

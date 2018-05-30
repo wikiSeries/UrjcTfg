@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
+import App.Auxiliar.Constantes;
 import App.Model.TvMaze.Person;
 
 @Entity
@@ -62,7 +63,7 @@ public class Actor {
 		this.personajes = new ArrayList<Personaje>();
 		
 		if(person.getImage() != null) {
-			this.urlImagen = person.getImage().getMedium().contains("https") ? person.getImage().getMedium() : person.getImage().getMedium().replace("http", "https");
+			this.urlImagen = person.getImage().getMedium().contains(Constantes.URL_HTTPS) ? person.getImage().getMedium() : person.getImage().getMedium().replace("http", Constantes.URL_HTTPS);
 		}
 		else {
 			this.urlImagen = "/Images/imageNoAvailable.png";
@@ -155,15 +156,15 @@ public class Actor {
 	public void Actualizar(Person p) {
 		this.setIdApi(p.getId());
 		this.setNombre(p.getName());
-		String pais = p.getCountry() != null ? p.getCountry().getName() : "";
-		this.setPais(pais);
+		String paisSet = p.getCountry() != null ? p.getCountry().getName() : "";
+		this.setPais(paisSet);
 		this.setFechaNacimiento(p.getBirthday());
 		this.setFechaFallecimiento(p.getDeathday());
 		this.setGenero(p.getGender());
 		
-		String imagen = new String();
+		String imagen;
 		if(p.getImage() != null) {
-			imagen = p.getImage().getMedium().contains("https") ? p.getImage().getMedium() : p.getImage().getMedium().replace("http", "https");
+			imagen = p.getImage().getMedium().contains(Constantes.URL_HTTPS) ? p.getImage().getMedium() : p.getImage().getMedium().replace("http", Constantes.URL_HTTPS);
 		}
 		else {
 			imagen = "/Images/imageNoAvailable.png";

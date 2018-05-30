@@ -97,10 +97,10 @@ public class UsuarioController {
 
 			logger.error(String.format("Iniciar Sesion%n%s", Utilidades.formatedExceptionMessage(ex)));
 
-			model.addAttribute("error", "Inicio de sesion");
-			model.addAttribute("descripcion", "Se ha producido un error al intentar iniciar la sesion actual."
-					+ "Vuelva a intentarlo mas tarde o pongase en contacto con el administrador.");
-			return "PaginaError";
+			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Inicio de sesion");
+			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al intentar iniciar la sesion actual."
+					+ Constantes.CONTACT_WITH_ADMIN);
+			return Constantes.TEMPLATE_PAGINA_ERROR;
 		}
 
 	}
@@ -125,8 +125,8 @@ public class UsuarioController {
 					if (usuario.isBloqueado()) {
 						errorDescripcion.append(Constantes.ERROR_BLOQ_DESC);
 					} else {
-						errorContraseña.append(Constantes.ERROR_CONTRASEÑA);
-						errorDescripcion.append(String.format(Constantes.ERROR_CONTRASEÑA_DESC, usuario.getIntentos()));
+						errorContraseña.append(Constantes.ERROR_CONTRASENA);
+						errorDescripcion.append(String.format(Constantes.ERROR_CONTRASENA_DESC, usuario.getIntentos()));
 					}
 
 				} else {
@@ -174,32 +174,32 @@ public class UsuarioController {
 							model.addAttribute("mensajeOk", String.format(Constantes.REGISTRO_OK, usuario.getCorreo()));
 
 						} else {
-							model.addAttribute("error", "Enviar correo");
-							model.addAttribute("descripcion", Constantes.ERROR_REGISTRO);
-							return "PaginaError";
+							model.addAttribute(Constantes.MODEL_ATT_ERROR, "Enviar correo");
+							model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, Constantes.ERROR_REGISTRO);
+							return Constantes.TEMPLATE_PAGINA_ERROR;
 						}
 
 					} else {
-						model.addAttribute("mensajeError", Constantes.ERROR_REGISTRO_CONFIRMACION_CONTRASEÑA);
+						model.addAttribute(Constantes.MODEL_ATT_MSG_ERROR, Constantes.ERROR_REGISTRO_CONFIRMACION_CONTRASENA);
 					}
 				}
 				else {
-					model.addAttribute("mensajeError", Constantes.ERROR_EMAIL_ADDRESS);
+					model.addAttribute(Constantes.MODEL_ATT_MSG_ERROR, Constantes.ERROR_EMAIL_ADDRESS);
 				}
 
 			} else {
-				model.addAttribute("mensajeError", String.format(Constantes.ERROR_REGISTRO_USUARIO, nombreUsuario));
+				model.addAttribute(Constantes.MODEL_ATT_MSG_ERROR, String.format(Constantes.ERROR_REGISTRO_USUARIO, nombreUsuario));
 			}
 
 			return "RegistroUsuario";
 		} catch (Exception ex) {
 			logger.error(String.format("Registro de usuario%n%s", Utilidades.formatedExceptionMessage(ex)));
 
-			model.addAttribute("error", "Registro");
-			model.addAttribute("descripcion", "Se ha producido un error al intentar registrar un nuevo usuario"
-					+ "Vuelva a intentarlo mas tarde o pongase en contacto con el administrador.");
+			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Registro");
+			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al intentar registrar un nuevo usuario"
+					+ Constantes.CONTACT_WITH_ADMIN);
 
-			return "PaginaError";
+			return Constantes.TEMPLATE_PAGINA_ERROR;
 		}
 
 	}
@@ -242,18 +242,18 @@ public class UsuarioController {
 
 			logger.error(String.format("Activar cuenta: %s", descripcion));
 
-			model.addAttribute("error", mensaje);
-			model.addAttribute("descripcion", descripcion);
+			model.addAttribute(Constantes.MODEL_ATT_ERROR, mensaje);
+			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, descripcion);
 
-			return "PaginaError";
+			return Constantes.TEMPLATE_PAGINA_ERROR;
 		} catch (Exception ex) {
 			logger.error(String.format("ActivarCuentaUsuario%n%s", Utilidades.formatedExceptionMessage(ex)));
 
-			model.addAttribute("error", "Activacion de cuenta");
-			model.addAttribute("descripcion", "Se ha producido un error al intentar activar su cuenta de usuario"
-					+ "Vuelva a intentarlo mas tarde o pongase en contacto con el administrador.");
+			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Activacion de cuenta");
+			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al intentar activar su cuenta de usuario"
+					+ Constantes.CONTACT_WITH_ADMIN);
 
-			return "PaginaError";
+			return Constantes.TEMPLATE_PAGINA_ERROR;
 		}
 
 	}
@@ -271,7 +271,7 @@ public class UsuarioController {
 
 				// Si el usuario se ha registrado hoy
 				if (fechaActual.equals(usuario.getFechaCreacion()) && usuario.isBloqueado()) {
-					model.addAttribute("mensajeError", Constantes.ERROR_RECU_CUENTA);
+					model.addAttribute(Constantes.MODEL_ATT_MSG_ERROR, Constantes.ERROR_RECU_CUENTA);
 
 				} else {
 					Email email = new Email();
@@ -288,7 +288,7 @@ public class UsuarioController {
 
 						model.addAttribute("mensajeOk", String.format(Constantes.RECU_CUENTA_OK, usuario.getCorreo()));
 					} else {
-						model.addAttribute("mensajeError", Constantes.ERROR_RECU_CUENTA_CORREO);
+						model.addAttribute(Constantes.MODEL_ATT_MSG_ERROR, Constantes.ERROR_RECU_CUENTA_CORREO);
 					}
 
 				}
@@ -296,7 +296,7 @@ public class UsuarioController {
 			}
 
 			else {
-				model.addAttribute("mensajeError", String.format(Constantes.ERROR_RECU_CUENTA_USUARIO, nombreUsuario));
+				model.addAttribute(Constantes.MODEL_ATT_MSG_ERROR, String.format(Constantes.ERROR_RECU_CUENTA_USUARIO, nombreUsuario));
 
 			}
 
@@ -304,12 +304,12 @@ public class UsuarioController {
 		} catch (Exception ex) {
 			logger.error(String.format("RecordarCuenta%n%s", Utilidades.formatedExceptionMessage(ex)));
 
-			model.addAttribute("error", "Recordar cuenta");
-			model.addAttribute("descripcion",
+			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Recordar cuenta");
+			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION,
 					"Se ha producido un error al intentar devolver los datos de su cuenta de usuario"
-							+ "Vuelva a intentarlo mas tarde o pongase en contacto con el administrador.");
+							+ Constantes.CONTACT_WITH_ADMIN);
 
-			return "PaginaError";
+			return Constantes.TEMPLATE_PAGINA_ERROR;
 		}
 
 	}
@@ -318,14 +318,14 @@ public class UsuarioController {
 	public String gestionarComentario(@PathVariable String publicar, @PathVariable Long idSerie,
 			@PathVariable Long idUsuario, @PathVariable Long idComentario, Model model) {
 		try {
-			String mensaje = new String();
-			String descripcion = new String();
+			String mensaje;
+			String descripcion;
 			Comentario comentario = repositorioComentarios.findById(idComentario);
 			Usuario usuario = repositorioUsuarios.findById(idUsuario);
 			Serie serie = repositorioSeries.findById(idSerie);
 			Email email = new Email();
 
-			StringBuilder cuerpoMensaje = new StringBuilder();
+			StringBuilder cuerpoMensaje;
 
 			if (publicar.equalsIgnoreCase("Publicar")) {
 
@@ -364,18 +364,18 @@ public class UsuarioController {
 			}
 
 			model.addAttribute("mensaje", mensaje);
-			model.addAttribute("descripcion", descripcion);
+			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, descripcion);
 
 			return "PaginaOk";
 
 		} catch (Exception ex) {
 			logger.error(String.format("Comentario%n%s", Utilidades.formatedExceptionMessage(ex)));
 
-			model.addAttribute("error", "Clasifiacion de comentario");
-			model.addAttribute("descripcion", "Se ha producido un error al intentar gestionar el comentario."
+			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Clasifiacion de comentario");
+			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al intentar gestionar el comentario."
 					+ "Compruebe los registros de error.");
 
-			return "PaginaError";
+			return Constantes.TEMPLATE_PAGINA_ERROR;
 		}
 
 	}
@@ -409,14 +409,14 @@ public class UsuarioController {
 					}
 					String tipoUsuario = usuario.getRoles().contains(repositorioRoles.findByTipo(Constantes.TIPO_ADMINISTRADOR)) ? Constantes.TIPO_ADMINISTRADOR : Constantes.TIPO_BASICO;
 
-					model.addAttribute("nombre", String.format("%s %s", usuario.getNombre(), usuario.getApellidos()));
-					model.addAttribute("nombreUsuario", usuario.getUsuario());
-					model.addAttribute("correo", usuario.getCorreo());
-					model.addAttribute("fechaRegistro", usuario.getFechaCreacion());
-					model.addAttribute("tipoUsuario", tipoUsuario);
+					model.addAttribute(Constantes.MODEL_ATT_NOMBRE, String.format("%s %s", usuario.getNombre(), usuario.getApellidos()));
+					model.addAttribute(Constantes.MODEL_ATT_NOMBRE_USUARIO, usuario.getUsuario());
+					model.addAttribute(Constantes.MODEL_ATT_CORREO, usuario.getCorreo());
+					model.addAttribute(Constantes.MODEL_ATT_FECHA_REGISTRO, usuario.getFechaCreacion());
+					model.addAttribute(Constantes.MODEL_ATT_TIPO_USUARIO, tipoUsuario);
 
 
-					return "Perfil";
+					return Constantes.TEMPLATE_PERFIL;
 				}
 				
 			}
@@ -425,11 +425,11 @@ public class UsuarioController {
 		} catch (Exception ex) {
 			logger.error(String.format("CambiarPassword%n%s", Utilidades.formatedExceptionMessage(ex)));
 
-			model.addAttribute("error", "Cambiar Contraseña");
-			model.addAttribute("descripcion", "Se ha producido un error al cambiar la contraseña."
+			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Cambiar Contraseña");
+			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al cambiar la contraseña."
 					+ "Pongase en contacto con el administrasdor.");
 
-			return "PaginaError";
+			return Constantes.TEMPLATE_PAGINA_ERROR;
 		}
 
 	}
@@ -447,12 +447,10 @@ public class UsuarioController {
 				Usuario usuario = repositorioUsuarios.findByUsuario(nombre);
 				if (usuario != null) {
 					if (!Utilidades.comprobarContraseña(contraseña, usuario.getContraseña())) {
-						model.addAttribute("errorPasswordCorreo", Constantes.ERROR_CONTRASEÑA);
+						model.addAttribute("errorPasswordCorreo", Constantes.ERROR_CONTRASENA);
 					} else if (!Utilidades.validarFormatoCorreo(nuevoCorreo)) {
 						model.addAttribute("errorNuevoCorreo", Constantes.ERROR_EMAIL_ADDRESS);
 					} else {
-						/*usuario.setCorreo(nuevoCorreo);
-						repositorioUsuarios.save(usuario);*/
 						
 						Email email = new Email();
 						StringBuilder cuerpoMensaje = email.crearMensajeConfirmacionCambioCorreo(usuario, nuevoCorreo);
@@ -466,13 +464,13 @@ public class UsuarioController {
 					}
 					String tipoUsuario = usuario.getRoles().contains(repositorioRoles.findByTipo(Constantes.TIPO_ADMINISTRADOR)) ? Constantes.TIPO_ADMINISTRADOR : Constantes.TIPO_BASICO;
 
-					model.addAttribute("nombre", String.format("%s %s", usuario.getNombre(), usuario.getApellidos()));
-					model.addAttribute("nombreUsuario", usuario.getUsuario());
-					model.addAttribute("correo", usuario.getCorreo());
-					model.addAttribute("fechaRegistro", usuario.getFechaCreacion());
-					model.addAttribute("tipoUsuario", tipoUsuario);
+					model.addAttribute(Constantes.MODEL_ATT_NOMBRE, String.format("%s %s", usuario.getNombre(), usuario.getApellidos()));
+					model.addAttribute(Constantes.MODEL_ATT_NOMBRE_USUARIO, usuario.getUsuario());
+					model.addAttribute(Constantes.MODEL_ATT_CORREO, usuario.getCorreo());
+					model.addAttribute(Constantes.MODEL_ATT_FECHA_REGISTRO, usuario.getFechaCreacion());
+					model.addAttribute(Constantes.MODEL_ATT_TIPO_USUARIO, tipoUsuario);
 					
-					return "Perfil";
+					return Constantes.TEMPLATE_PERFIL;
 				}
 					
 			}
@@ -481,11 +479,11 @@ public class UsuarioController {
 		} catch (Exception ex) {
 			logger.error(String.format("CambiarCorreo%n%s", Utilidades.formatedExceptionMessage(ex)));
 
-			model.addAttribute("error", "Cambiar direccion de correo electronico");
-			model.addAttribute("descripcion", "Se ha producido un error al cambiar la direccion de correo."
+			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Cambiar direccion de correo electronico");
+			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al cambiar la direccion de correo."
 					+ "Vuelva a intentarlo mas tarde o pongase en contacto con el administrasdor.");
 
-			return "PaginaError";
+			return Constantes.TEMPLATE_PAGINA_ERROR;
 		}
 
 	}
@@ -499,10 +497,10 @@ public class UsuarioController {
 			String fechaCambioDecodificada = Utilidades.getTextDecoded(fechaCambio);
 			
 			if(!fecha.equals(fechaCambioDecodificada)) {
-				model.addAttribute("error", Constantes.ERROR_LINK_EXPIRED);
-				model.addAttribute("descripcion", Constantes.ERROR_LINK_EXPIRED_DESC);
+				model.addAttribute(Constantes.MODEL_ATT_ERROR, Constantes.ERROR_LINK_EXPIRED);
+				model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, Constantes.ERROR_LINK_EXPIRED_DESC);
 				
-				return "PaginaError";
+				return Constantes.TEMPLATE_PAGINA_ERROR;
 			}
 			
 			String nuevoCorreoDecodificado = Utilidades.getTextDecoded(nuevoCorreo);
@@ -516,14 +514,14 @@ public class UsuarioController {
 			if(session != null) {
 				String tipoUsuario = usuario.getRoles().contains(repositorioRoles.findByTipo(Constantes.TIPO_ADMINISTRADOR)) ? Constantes.TIPO_ADMINISTRADOR : Constantes.TIPO_BASICO;
 				model.addAttribute("cambiarCorreoOk", Constantes.CHANGE_EMAIL_ADDRESS_CONFIRM_OK);
-				model.addAttribute("nombre", String.format("%s %s", usuario.getNombre(), usuario.getApellidos()));
-				model.addAttribute("nombreUsuario", usuario.getUsuario());
-				model.addAttribute("correo", usuario.getCorreo());
-				model.addAttribute("fechaRegistro", usuario.getFechaCreacion());
-				model.addAttribute("tipoUsuario", tipoUsuario);
+				model.addAttribute(Constantes.MODEL_ATT_NOMBRE, String.format("%s %s", usuario.getNombre(), usuario.getApellidos()));
+				model.addAttribute(Constantes.MODEL_ATT_NOMBRE_USUARIO, usuario.getUsuario());
+				model.addAttribute(Constantes.MODEL_ATT_CORREO, usuario.getCorreo());
+				model.addAttribute(Constantes.MODEL_ATT_FECHA_REGISTRO, usuario.getFechaCreacion());
+				model.addAttribute(Constantes.MODEL_ATT_TIPO_USUARIO, tipoUsuario);
 
 	
-				return "Perfil";
+				return Constantes.TEMPLATE_PERFIL;
 				
 			}
 			
@@ -534,11 +532,11 @@ public class UsuarioController {
 		catch(Exception ex) {
 			logger.error(String.format("confirmarCmbioCorreo%n%s", Utilidades.formatedExceptionMessage(ex)));
 
-			model.addAttribute("error", "Confirmar cambio de direccion de correo electronico");
-			model.addAttribute("descripcion", "Se ha producido un error al cambiar la direccion de correo."
+			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Confirmar cambio de direccion de correo electronico");
+			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al cambiar la direccion de correo."
 					+ "Vuelva a intentarlo mas tarde o pongase en contacto con el administrasdor.");
 
-			return "PaginaError";
+			return Constantes.TEMPLATE_PAGINA_ERROR;
 		}
 	}
 

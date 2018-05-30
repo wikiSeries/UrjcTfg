@@ -68,7 +68,7 @@ public class Utilidades {
 		byte[] passBytes = contraseña.getBytes();
 		md.reset();
 		byte[] digested = md.digest(passBytes);
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		for(int i=0;i<digested.length;i++){
 		    sb.append(Integer.toHexString(0xff & digested[i]));
 		}
@@ -83,7 +83,7 @@ public class Utilidades {
 	}
 	
 	public static final String generarNuevaContraseñaAleatoria() {
-		return RandomStringUtils.randomAlphanumeric(Constantes.LONGITUD_CONTRASEÑA_ALEATORIA);
+		return RandomStringUtils.randomAlphanumeric(Constantes.LONGITUD_CONTRASENA_ALEATORIA);
 
 	}
 	
@@ -134,7 +134,7 @@ public class Utilidades {
 
 	public static final void actualizarCookie(Cookie cookie, String extensionCookie) {
 		List <Long> idSeriesNoRepeat = getIdSeriesNoRepeat(cookie.getValue());
-		String newValueCookie = new String();
+		String newValueCookie = null;
 		for(Long id : idSeriesNoRepeat) {
 			if(idSeriesNoRepeat.get(0).equals(id)) {
 				newValueCookie = id.toString();

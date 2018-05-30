@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import App.Auxiliar.Constantes;
+
 @Entity
 public class Personaje {
 
@@ -44,7 +46,7 @@ public class Personaje {
 		this.nombre = character.getName();
 		
 		if(character.getImage() != null) {
-			this.urlImagen = character.getImage().getMedium().contains("https") ? character.getImage().getMedium() : character.getImage().getMedium().replace("http", "https");
+			this.urlImagen = character.getImage().getMedium().contains(Constantes.URL_HTTPS) ? character.getImage().getMedium() : character.getImage().getMedium().replace("http", Constantes.URL_HTTPS);
 		}
 		else {
 			this.urlImagen = "/Images/imageNoAvailable.png";
@@ -106,9 +108,9 @@ public class Personaje {
 		this.setIdApi(character.getId());
 		this.setNombre(character.getName());
 		
-		String imagen = new String();
+		String imagen;
 		if(character.getImage() != null) {
-			imagen = character.getImage().getMedium().contains("https") ? character.getImage().getMedium() : character.getImage().getMedium().replace("http", "https");
+			imagen = character.getImage().getMedium().contains(Constantes.URL_HTTPS) ? character.getImage().getMedium() : character.getImage().getMedium().replace("http", Constantes.URL_HTTPS);
 		}
 		else {
 			imagen = "/Images/imageNoAvailable.png";

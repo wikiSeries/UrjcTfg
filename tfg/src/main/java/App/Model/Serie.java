@@ -14,8 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import App.Auxiliar.Constantes;
 import App.Model.TvMaze.SerieApi;
 
@@ -100,7 +98,7 @@ public class Serie {
 		this.puntuacion = serieApi.getRating() != null ? serieApi.getRating().getAverage() : 0; 
 		
 		if(serieApi.getImage() != null) {
-			this.urlImage = serieApi.getImage().getMedium().contains("https") ? serieApi.getImage().getMedium() : serieApi.getImage().getMedium().replace("http", "https");
+			this.urlImage = serieApi.getImage().getMedium().contains(Constantes.URL_HTTPS) ? serieApi.getImage().getMedium() : serieApi.getImage().getMedium().replace("http", Constantes.URL_HTTPS);
 		}
 		else {
 			this.urlImage = "/Images/imageNoAvailable.png";
@@ -256,10 +254,6 @@ public class Serie {
 		this.actores = actores;
 	}
 
-	public String getIdVideo() {
-		return idVideo;
-	}
-
 	public List<Temporada> getTemporadas() {
 		return temporadas;
 	}
@@ -304,16 +298,16 @@ public class Serie {
 		this.setIdApi(serieApi.getId());
 		this.setTitulo(serieApi.getName());
 		
-		String descripcion = serieApi.getSummary().length() > Constantes.NUMERO_LIMITE_COLUMNA_TEXTO ? serieApi.getSummary().substring(0, Constantes.NUMERO_LIMITE_COLUMNA_TEXTO - Constantes.FINAL_PARRAFO.length()) + Constantes.FINAL_PARRAFO : serieApi.getSummary();
-		this.setDescripcion(descripcion);
+		String descripcionSet = serieApi.getSummary().length() > Constantes.NUMERO_LIMITE_COLUMNA_TEXTO ? serieApi.getSummary().substring(0, Constantes.NUMERO_LIMITE_COLUMNA_TEXTO - Constantes.FINAL_PARRAFO.length()) + Constantes.FINAL_PARRAFO : serieApi.getSummary();
+		this.setDescripcion(descripcionSet);
 		this.setFechaEstreno(serieApi.getPremiered());
 		
-		double puntuacion = serieApi.getRating() != null ? serieApi.getRating().getAverage() : 0;
-		this.setPuntuacion(puntuacion);
+		double puntuacionSet = serieApi.getRating() != null ? serieApi.getRating().getAverage() : 0;
+		this.setPuntuacion(puntuacionSet);
 		
-		String imagen = new String();
+		String imagen;
 		if(serieApi.getImage() != null) {
-			imagen = serieApi.getImage().getMedium().contains("https") ? serieApi.getImage().getMedium() : serieApi.getImage().getMedium().replace("http", "https");
+			imagen = serieApi.getImage().getMedium().contains(Constantes.URL_HTTPS) ? serieApi.getImage().getMedium() : serieApi.getImage().getMedium().replace("http", Constantes.URL_HTTPS);
 		}
 		else {
 			imagen = "/Images/imageNoAvailable.png";
@@ -321,11 +315,11 @@ public class Serie {
 		
 		this.setUrlImage(imagen);
 		
-		String canalWeb = serieApi.getWebChannel() != null ? serieApi.getWebChannel().getName() : null;
-		this.setCanalWeb(canalWeb);
+		String canalWebSet = serieApi.getWebChannel() != null ? serieApi.getWebChannel().getName() : null;
+		this.setCanalWeb(canalWebSet);
 		
-		String canalTv = serieApi.getNetwork() != null ? serieApi.getNetwork().getName() : null;
-		this.setCanalTv(canalTv);
+		String canalTvSet = serieApi.getNetwork() != null ? serieApi.getNetwork().getName() : null;
+		this.setCanalTv(canalTvSet);
 		
 		this.setSitioWeb(serieApi.getOfficialSite());
 		this.setIdioma(serieApi.getLanguage());
@@ -333,16 +327,16 @@ public class Serie {
 	}
 	
 	public String getGenerosToString() {
-		StringBuilder generos = new StringBuilder();
+		StringBuilder generosString = new StringBuilder();
 		for(Genero g : this.generos) {
 			if(g.equals(this.generos.get(this.generos.size() -1 ))) {
-				generos.append(g.getTitulo()).append(".");
+				generosString.append(g.getTitulo()).append(".");
 			}
 			else {
-				generos.append(g.getTitulo()).append(", ");
+				generosString.append(g.getTitulo()).append(", ");
 			}
 		}
-		return generos.toString();
+		return generosString.toString();
 	}
 	
 	

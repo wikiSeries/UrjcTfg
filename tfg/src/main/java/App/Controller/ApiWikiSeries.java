@@ -440,18 +440,7 @@ public class ApiWikiSeries {
 			usuario.setEpisodiosVistos(new ArrayList<Episodio>());
 			
 			for(Temporada t : serie.getTemporadas()) {
-				for(Episodio e : t.getEpisodios()) {
-					try {
-						e.getUsuarios().remove(usuario);
-						e.getUsuariosV().remove(usuario);
-						
-						repositorioEpisodios.save(e);
-					}
-					catch(Exception ex) {
-						logger.error(String.format("EliminarMiSerie%n%s", Utilidades.formatedExceptionMessage(ex)));
-					}
-					
-				}
+				eliminarMisEpisodios(t, usuario);
 			}
 			
 			usuario.getSeries().remove(serie);
@@ -464,6 +453,21 @@ public class ApiWikiSeries {
 			logger.error(String.format("EliminarMiSerie%n%s", Utilidades.formatedExceptionMessage(ex)));
 		}
 		
+	}
+	
+	private void eliminarMisEpisodios(Temporada temporada, Usuario usuario) {
+		for(Episodio e : temporada.getEpisodios()) {
+			try {
+				e.getUsuarios().remove(usuario);
+				e.getUsuariosV().remove(usuario);
+				
+				repositorioEpisodios.save(e);
+			}
+			catch(Exception ex) {
+				logger.error(String.format("EliminarMiSerie%n%s", Utilidades.formatedExceptionMessage(ex)));
+			}
+			
+		}
 	}
 	
 	@RequestMapping(value = "/EliminarSerie/{idSerie}", method = RequestMethod.DELETE)

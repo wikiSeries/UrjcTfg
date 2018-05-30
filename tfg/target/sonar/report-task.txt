@@ -1,7 +1,7 @@
 organization=wikiseries-github
 projectKey=urjc:tfg
 serverUrl=https://sonarcloud.io
-serverVersion=7.2.0.12086
+serverVersion=7.2.0.12516
 dashboardUrl=https://sonarcloud.io/dashboard/index/urjc:tfg
-ceTaskId=AWOYbcqxO3RMHxKv_dcf
-ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AWOYbcqxO3RMHxKv_dcf
+ceTaskId=AWOxwi6ORIlG_RTu9c00
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AWOxwi6ORIlG_RTu9c00

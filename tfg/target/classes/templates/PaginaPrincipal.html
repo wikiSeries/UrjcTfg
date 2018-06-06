@@ -50,24 +50,28 @@
 			  	<!--<p class="navbar-text pull-right" style="color:#fff;" th:text="'Hola ' + ${nombreUsuario}"></p>-->
 			  	
 			  	<ul class ="nav navbar-nav navbar-right">
-			  		<li class="dropdown">
-			  			<a id ="nameUser" style="color:#fff;" href="#" class="dropdown-toggle" data-toggle="dropdown" th:text="'Hola ' + ${nombreUsuario}"></a>
-			  				  
-				  		<ul class="dropdown-menu">
-				  			
-				  			<li th:if="${esAdministrador == true}">
-				  				<a href = "/SubirSerie"><i class="fas fa-cloud-upload-alt"></i> Subir Serie</a>
-				  			</li>
-				  							  			
-				  			<li>
-				  				<a href="/Perfil"><i class="fas fa-user-circle"></i> Mi perfil</a>	
-				  			</li>	
-				  			
-				  			<li>
-				  				<a href="/Logout"><i class="fas fa-power-off"></i> Cerrar sesion</a>	
-				  			</li>
-				  			
-				  		</ul>
+			  		<li>
+			  			<div class="dropdown" style = "line-height: 50px;">
+			  				<span id ="nameUser" style="color:#fff;" th:text="'Hola ' + ${nombreUsuario}"></span>
+			  		
+				  			<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style = "font-size: 25px;"><i class="fas fa-cog"></i></button>
+				  				  
+					  		<ul class="dropdown-menu">
+					  			
+					  			<li th:if="${esAdministrador == true}">
+					  				<a href = "/SubirSerie"><i class="fas fa-cloud-upload-alt"></i> Subir Serie</a>
+					  			</li>
+					  							  			
+					  			<li>
+					  				<a href="/Perfil"><i class="fas fa-user-circle"></i> Mi perfil</a>	
+					  			</li>	
+					  			
+					  			<li>
+					  				<a href="/Logout"><i class="fas fa-power-off"></i> Cerrar sesion</a>	
+					  			</li>
+					  			
+					  		</ul>
+					  	</div>
 			  		</li>
 			  
 			  	</ul>

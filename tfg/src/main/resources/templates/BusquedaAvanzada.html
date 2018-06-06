@@ -9,6 +9,7 @@
 	    
 		<script type="text/javascript" src="/webjars/jquery/3.1.1/jquery.min.js"></script>    
 		<script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="/webjars/font-awesome/5.0.6/on-server/js/fontawesome-all.js"></script>
 		
 	</head>
 	
@@ -16,9 +17,7 @@
 	
 		<nav class="title navbar navbar-default" role="navigation">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-					
-			    </button>
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse"><i class="fas fa-bars"></i></button>
 				<a class="navbar-brand" style="color:#fff" href="#">Wiki Series</a>	
 			</div>
 			
@@ -26,7 +25,8 @@
 			    <ul class="nav navbar-nav">
 			    	<li><a style="color:#fff" href = "/PaginaPrincipal/1">Inicio</a></li>
 			    	<li><a style="color:#fff" href="/MisSeries">Mis Series</a></li>
-			      
+			    	<li><a style = "background-color : white; color : #4d90fe;" href = "#">Busqueda avanzada</a></li>
+			    		      
 			    </ul>
 			  	
 			  	<p class="navbar-text pull-right" style="color:#fff;" th:text="'Hola ' + ${nombreUsuario}"></p>

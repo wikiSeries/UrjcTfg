@@ -16,6 +16,7 @@ import java.util.regex.Matcher;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
@@ -152,7 +153,7 @@ public class Utilidades {
 		newValueCookie = String.format("%s,%s", extensionCookie, newValueCookie);
 		String newValueCookieCod = getTextEncoded(newValueCookie);
 		cookie.setValue(newValueCookieCod);
-		cookie.setMaxAge(Constantes.TIEMPO_COOKIE_SERIE_USUARIO);
+		//cookie.setMaxAge(Constantes.DIAS_EXPIRACION_COOKIE_SERIE_USUARIO * 3600);
 		cookie.setPath("/");
 	}
 
@@ -161,7 +162,7 @@ public class Utilidades {
 		String valorCod = getTextEncoded(valor);
 		
 		Cookie cookie = new Cookie(claveCod, valorCod);
-		cookie.setMaxAge(Constantes.TIEMPO_COOKIE_SERIE_USUARIO);
+		cookie.setMaxAge(Constantes.DIAS_EXPIRACION_COOKIE_SERIE_USUARIO * 3600);
 		cookie.setPath("/");
 		cookie.setSecure(true);
 		

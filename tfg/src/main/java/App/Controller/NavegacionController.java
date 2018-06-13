@@ -99,8 +99,6 @@ public class NavegacionController {
 				Page<Serie> page = repositorioSeries.findAll(pageRequest);
 				
 				crearModeloPaginaPrincipal(model, nombre, page);
-				boolean esAdministrador = repositorioUsuarios.findByUsuario(nombre).getRoles().contains(repositorioRoles.findByTipo(Constantes.TIPO_ADMINISTRADOR));
-				model.addAttribute("esAdministrador", esAdministrador);
 				
 				UtilidadesLista<Genero> utilList = new UtilidadesLista<Genero>();
 				model.addAttribute("filtroGeneros", utilList.dividirListaPorNumeroDeSubListas(repositorioGeneros.findAll(), Constantes.NUMERO_PARTICION_LISTA_GENEROS));
@@ -134,6 +132,8 @@ public class NavegacionController {
 			indices[i] = i + 1;
 		}
 		
+		boolean esAdministrador = repositorioUsuarios.findByUsuario(nombreUsuario).getRoles().contains(repositorioRoles.findByTipo(Constantes.TIPO_ADMINISTRADOR));
+		model.addAttribute("esAdministrador", esAdministrador);
 		model.addAttribute(Constantes.MODEL_ATT_NOMBRE_USUARIO, nombreUsuario);
 		model.addAttribute(Constantes.MODEL_ATT_CURRENT_PAG, paginaActual);
 		model.addAttribute(Constantes.MODEL_ATT_SERIES, page);
@@ -226,8 +226,7 @@ public class NavegacionController {
 				model.addAttribute("nombrePersonaje", "");
 				model.addAttribute("estrellas", estrellas);
 				model.addAttribute("anos", anos);
-				model.addAttribute("generos", generos);
-				
+				model.addAttribute("generos", generos);				
 				return "BusquedaAvanzada";
 			}
 			
@@ -318,6 +317,25 @@ public class NavegacionController {
 		List<Genero> generosSeriesCookies = Utilidades.getGenerosSeriesCookies(seriesCookiesNoRepeat);
 		PageRequest pageRequest = new PageRequest(0, Constantes.NUMERO_IDSERIE_COOKIE, Sort.Direction.ASC, "puntuacionMediaEstrella");
 		return repositorioSeries.findDistinctByGenerosIn(generosSeriesCookies, pageRequest);
+		
+	}
+	
+	@RequestMapping(value = "/Contacto", method = RequestMethod.GET)
+	public String getContacto(HttpServletRequest httpRequest, HttpServletResponse httpResponse, Model model) {
+		try {
+			Utilidades.noCachearRespuestaHTTP(httpResponse);
+			HttpSession session = httpRequest.getSession(false);
+			if(session != null) {
+				String nombre = (String) session.getAttribute("user");
+				model.addAttribute(Constantes.MODEL_ATT_NOMBRE_USUARIO, nombre);
+				return "Contacto";
+			}
+			
+			return Constantes.REDIRECT_LOGIN;
+		}
+		catch(Exception ex) {
+			return Utilidades.logErrorAndGetPageError(ex, "getContacto", model, "Pagina contacto", "Se ha producido al cargar la pagina." + Constantes.CONTACT_WITH_ADMIN);
+		}
 		
 	}
 

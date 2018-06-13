@@ -201,5 +201,18 @@ public class Email {
 		
 		return mensaje;
 	}
+	
+	public StringBuilder crearMensajeContacto(Usuario usuario, String mensaje) {
+		StringBuilder cuerpoMensaje = new StringBuilder();
+		cuerpoMensaje.append(DIV)
+				.append(String.format("<p><b>%s : </b><span>%s %s</span></p>", "Nombre", usuario.getNombre(), usuario.getApellidos()))
+				.append(String.format("<p><b>%s : </b><span>%s</span></p>", "Usuario", usuario.getUsuario()))
+				.append(String.format("<p><b>%s : </b><span>%s</span></p>", "Direccion de correo", usuario.getCorreo()))
+				.append("<br />")
+				.append(String.format("<p>%s</p>",  mensaje))
+				.append(CLOSE_DIV);
+		
+		return cuerpoMensaje;
+	}
 
 }

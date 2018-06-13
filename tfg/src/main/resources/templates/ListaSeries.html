@@ -3,13 +3,14 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>Mis series</title>
-		
+		<link rel = "icon" type = "image/png" href = "/Images/logo.png" />
 		<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
 		<!-- Website Font style -->
 	    <link rel="stylesheet" href="/webjars/font-awesome/4.6.1/css/font-awesome.min.css" />
 	    <link rel="stylesheet" th:href="@{/css/ListaSeries.css}" />
 	   	<link rel="stylesheet" th:href="@{/css/MyModals.css}" />
-	        
+	   	<link rel="stylesheet" th:href="@{/css/Comunes.css}" />
+	   	
 		<script type="text/javascript" src="/webjars/jquery/3.1.1/jquery.min.js"></script>    
 		<script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<script type="text/javascript" th:src="@{/js/FiltroLista.js}"></script>
@@ -31,6 +32,8 @@
 				  <li><a style="color:#fff" href = "/PaginaPrincipal/1">Inicio</a></li>
 				  <li><a style = "background-color : white; color : #4d90fe;" href = "#">Mis Series</a></li>
 			      <li><a style="color:#fff" href="/BusquedaAvanzada">Busqueda avanzada</a></li>
+			      <li><a style="color:#fff" href="/Contacto">Contacto</a></li>
+			      
 			    </ul>
 			    			  	
 			  	<p class="navbar-text pull-right" id = "usuarioActual" th:attr = "data-usuario = ${nombreUsuario}" style="color:#fff;" th:text="'Hola ' + ${nombreUsuario}"></p>
@@ -228,7 +231,7 @@
 											<table class="table table-hover" id="dev-tableP">
 												<tbody>
 													
-													<tr th:each = "e : ${pendientes}" th:id = "${e.id} + 'E'">
+													<tr th:each = "e : ${pendientes}" th:id = "${e.id} + 'E'"> 
 														
 															
 														<td class = "col-lg-2">
@@ -274,37 +277,8 @@
 					
 				</div>
 			</div>
-		</div> 
-				
+		</div> 	
+
 	</body>
+	
 </html>
-
-<style>
-.title{
-	background-color: #4d90fe;
-	border: 0px;
-} 
-
-.link{
-    cursor: pointer;
-    background: none;
-    border:none;
-        
-	display: block;
-	padding: 3px 20px;
-	clear: both;
-	font-weight: normal;
-	line-height: 1.42857143;
-	color: #333;
-	white-space: nowrap;
-}
-
-.bordes{
-	border: 2px solid #337ab7;
-}
-
-.spaceTop-50{
-	margin-top: 50px;
-}
-
-</style>

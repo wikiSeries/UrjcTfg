@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>Ficha Serie</title>
-		
+		<link rel = "icon" type = "image/png" href = "/Images/logo.png" />
 		<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
 		
@@ -44,9 +44,7 @@
 		
 		<nav class="title navbar navbar-default" role="navigation">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-					
-			    </button>
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse"><span class = "glyphicon glyphicon-align-justify"></span></button>
 				<a class="navbar-brand" style="color:#fff" href="#">Wiki Series</a>	
 			</div>
 			
@@ -55,6 +53,8 @@
 			      <li><a style="color:#fff" href = "/PaginaPrincipal/1">Inicio</a></li>
 			      <li><a style="color:#fff" href="/MisSeries">Mis Series</a></li>
 			      <li><a style="color:#fff" href="/BusquedaAvanzada">Busqueda avanzada</a></li>
+			      <li><a style="color:#fff" href="/Contacto">Contacto</a></li>
+			      <li><a style = "background-color : white; color : #4d90fe;" href="#">Ficha serie</a></li>
 			      
 			    </ul>
 			  	
@@ -169,7 +169,7 @@
 						</div>
 						<div class="row" id="addcomment" style="display: none;">
 							
-								<textarea class="form-control" id = "textoComentario" placeholder="Introducir comentario..."></textarea><br/>
+								<textarea class="form-control only-resize-vertical" id = "textoComentario" placeholder="Introducir comentario..."></textarea><br/>
 								<button class="btn btn-primary" onclick = "enviarComentario()">Enviar</button>
 							
 						</div>

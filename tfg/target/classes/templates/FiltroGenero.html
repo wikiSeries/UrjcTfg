@@ -3,13 +3,16 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>Filtro genero</title>
-		
+		<link rel = "icon" type = "image/png" href = "/Images/logo.png" />
 		<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
 		<!-- Website Font style -->
-	    <link rel="stylesheet" href="/webjars/font-awesome/4.6.1/css/font-awesome.min.css" />
+	   	<link rel="stylesheet" th:href="@{/css/Comunes.css}" />
 	    
 		<script type="text/javascript" src="/webjars/jquery/3.1.1/jquery.min.js"></script>    
 		<script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="/webjars/font-awesome/5.0.6/on-server/js/fontawesome-all.js"></script>
+		<script src="/webjars/bootbox/4.4.0/bootbox.js"></script>
+		<script type="text/javascript" th:src="@{/js/Botones.js}"></script>
 		
 		
 	</head>
@@ -59,12 +62,15 @@
 			<div class="row" id="tablonSeries">
 				<p th:if = "${series.getTotalPages()} == 0" class = "text-center">No se han encontrado resultados</p>
 				<div class="col-sm-6 col-md-4" th:each="serie : ${series}">
-					   <div class="thumbnail">
-					     <a th:href="@{/InfoSerie/} + ${serie.id}"><img th:src="@{${serie.urlImage}}" /></a>
-					     <div class="caption text-center">
-					       <h3 th:text="${serie.titulo}"></h3>
-					     </div>
-					   </div>
+					<div class="thumbnail radial-black-blue">	
+						<div th:if="${esAdministrador == true}">
+							<i id = "iconoEliminarSerie" class="fas fa-trash-alt pull-right size-icon-30 clickable" th:onclick= "'confirmarEliminar(' + ${serie.id} + ')'"></i>
+						</div>
+						<a th:href="@{/InfoSerie/} + ${serie.id}"><img th:src="@{${serie.urlImage}}" /></a>
+						<div class="caption text-center">
+							<h3 class = "text-white" th:text="${serie.titulo}"></h3>
+						</div>
+					</div>
 				</div>
 			</div>
 			
@@ -112,29 +118,3 @@
 		</div>	  
 	</body>
 </html>
-
-<style>
-.title{
-	background-color: #4d90fe;
-	border: 0px;
-} 
-
-.link{
-    cursor: pointer;
-    background: none;
-    border:none;
-        
-	display: block;
-	padding: 3px 20px;
-	clear: both;
-	font-weight: normal;
-	line-height: 1.42857143;
-	color: #333;
-	white-space: nowrap;
-}
-
-.bordes{
-	border: 2px solid #337ab7;
-}
-
-</style>

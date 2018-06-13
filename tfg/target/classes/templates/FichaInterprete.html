@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>Ficha Interprete</title>
-		
+		<link rel = "icon" type = "image/png" href = "/Images/logo.png" />
 		<link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="/webjars/font-awesome/4.6.1/css/font-awesome.min.css" />	
 		<link rel="stylesheet" th:href="@{/css/InfoInterpreter.css}" />	
@@ -23,10 +23,8 @@
 		
 		<nav class="title navbar navbar-default" role="navigation">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-					
-			    </button>
-				<p class="navbar-brand" style="color:#fff">Wiki Series</p>	
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse"><i class="fas fa-cog"></i></button>
+				<a class="navbar-brand" style="color:#fff" href = "#">Wiki Series</a>	
 			</div>
 			
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
@@ -34,6 +32,8 @@
 				  <li><a style="color:#fff" href = "/PaginaPrincipal/1">Inicio</a></li>
 			      <li><a style="color:#fff" href="/MisSeries">Mis Series</a></li>
 			      <li><a style="color:#fff" href="/BusquedaAvanzada">Busqueda avanzada</a></li>
+			      <li><a style="color:#fff" href="/Contacto">Contacto</a></li>
+			      <li><a style = "background-color : white; color : #4d90fe;" href="#">Ficha Interprete</a></li>
 			    </ul>
 			    
 			   <p class="navbar-text pull-right" id = "usuarioActual" th:attr = "data-usuario = ${nombreUsuario}" style="color:#fff;" th:text="'Hola ' + ${nombreUsuario}"></p>

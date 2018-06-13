@@ -3,12 +3,13 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>Perfil</title>
-		
+		<link rel = "icon" type = "image/png" href = "/Images/logo.png" />
 		<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
 		<!-- Website Font style -->
 	    <link rel="stylesheet" href="/webjars/font-awesome/4.6.1/css/font-awesome.min.css" />	
+	   	<link rel="stylesheet" th:href="@{/css/Comunes.css}" />
 	    <link rel="stylesheet" th:href="@{/css/PasswordStrength.css}" />
-	        
+
 	    
 		<script type="text/javascript" src="/webjars/jquery/3.1.1/jquery.min.js"></script>    
 		<script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>		
@@ -23,10 +24,8 @@
 		
 		<nav class="title navbar navbar-default" role="navigation">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-					
-			    </button>
-				<p class="navbar-brand" style="color:#fff">Wiki Series</p>	
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse"><i class="fas fa-bars"></i></button>
+				<a class="navbar-brand" style="color:#fff" href = "#">Wiki Series</a>	
 			</div>
 			
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
@@ -34,6 +33,9 @@
 				  <li><a style="color:#fff" href = "/PaginaPrincipal/1">Inicio</a></li>
 			      <li><a style="color:#fff" href="/MisSeries">Mis Series</a></li>
 			      <li><a style="color:#fff" href="/BusquedaAvanzada">Busqueda avanzada</a></li>
+			      <li><a style="color:#fff" href="/Contacto">Contacto</a></li>
+			      <li><a style = "background-color : white; color : #4d90fe;" href="#">Mi perfil</a></li>
+			      
 			    </ul>
 			  			  	
 			  	<ul class ="nav navbar-nav navbar-right">
@@ -204,39 +206,10 @@
 				</div>
 			</div>
 			
-		</div> 			
+		</div>	
 	</body>
 </html>
 
-<style>
-.title{
-	background-color: #4d90fe;
-	border: 0px;
-} 
-
-.link{
-    cursor: pointer;
-    background: none;
-    border:none;
-        
-	display: block;
-	padding: 3px 20px;
-	clear: both;
-	font-weight: normal;
-	line-height: 1.42857143;
-	color: #333;
-	white-space: nowrap;
-}
-
-.bordes{
-	border: 2px solid #337ab7;
-}
-
-.spaceTop-50{
-	margin-top: 50px;
-}
-
-</style>
 <script>
 $(document).ready(function () {
     var obj = $('#password').passwordStrength();

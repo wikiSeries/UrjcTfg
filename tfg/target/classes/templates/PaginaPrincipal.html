@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>Pagina Principal</title>
-		
+		<link rel = "icon" type = "image/png" href = "/Images/logo.png" />
 		<link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />		
 		
 	    <link rel="stylesheet" th:href="@{/css/SeriesCookie.css}" />
@@ -36,6 +36,8 @@
 			    	<li><a style = "background-color : white; color : #4d90fe;" href = "#">Inicio</a></li>
 					<li><a style="color:#fff" href="/MisSeries">Mis Series</a></li>
 					<li><a style="color:#fff" href="/BusquedaAvanzada">Busqueda avanzada</a></li>
+					<li><a style="color:#fff" href="/Contacto">Contacto</a></li>
+					
 			    </ul>
 			    
 			   	<form action = "/BuscarTitulo" method = "get" class="navbar-form navbar-left" role="search">
@@ -94,7 +96,7 @@
 									<div class="col-md-3">
 										<a th:href="@{/InfoSerie/} + ${serieCookie.id}"><img th:src="@{${serieCookie.urlImage}}" class="img-responsive borderColor"/></a>
 									</div>
-									<div class="col-md-9 text-white">
+								 	<div class="col-md-9">
 										<h2 th:text = "${serieCookie.titulo}"></h2>
 										<p th:utext = "${serieCookie.descripcion}"></p>
 									</div>
@@ -133,14 +135,14 @@
 			
 			<div class="row spaceTop-50" id="tablonSeries">
 				<div class="col-sm-6 col-md-4" th:each="serie : ${series}">
-					   <div class="thumbnail">
+					   <div class="thumbnail radial-black-blue">
 							<div th:if="${esAdministrador == true}">
 								<i id = "iconoEliminarSerie" class="fas fa-trash-alt pull-right size-icon-30 clickable" th:onclick= "'confirmarEliminar(' + ${serie.id} + ')'"></i>
 							</div>
 							
 							<a th:href="@{/InfoSerie/} + ${serie.id}"><img th:id = "'image' + ${serie.id}" th:src="@{${serie.urlImage}}" /></a>
 							<div class="caption text-center">
-							  <h3 th:text="${serie.titulo}"></h3>
+							  <h3 class = "text-white" th:text="${serie.titulo}"></h3>
 							</div>
 					   </div>
 				</div>
@@ -186,37 +188,9 @@
 							
 					</ul>						
 				</div>
-			</div>		  
-		</div> 			
+			</div>	
+			
+		</div> 	
 	</body>
+		
 </html>
-
-<style>
-.title{
-	background-color: #4d90fe;
-	border: 0px;
-} 
-
-.link{
-    cursor: pointer;
-    background: none;
-    border:none;
-        
-	display: block;
-	padding: 3px 20px;
-	clear: both;
-	font-weight: normal;
-	line-height: 1.42857143;
-	color: #333;
-	white-space: nowrap;
-}
-
-.bordes{
-	border: 2px solid #337ab7;
-}
-
-.spaceTop-50{
-	margin-top: 50px;
-}
-
-</style>

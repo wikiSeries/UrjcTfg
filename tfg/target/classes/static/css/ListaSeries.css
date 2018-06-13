@@ -1,5 +1,9 @@
 @charset "ISO-8859-1";
 
+.heightLimit{
+	height: 500px;
+}
+
 .tabsIcon{
 	font-size: 30px;
 }

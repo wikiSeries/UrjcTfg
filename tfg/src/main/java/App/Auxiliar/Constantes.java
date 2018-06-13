@@ -16,7 +16,8 @@ public class Constantes {
 	public static final int  NUMEROINTENTOSLOGIN = 3;
 	public static final int  NUMERO_SERIES_PAGINA = 6;
 	public static final int NUMERO_PARTICION_LISTA_GENEROS = 3;
-	public static final int TIEMPO_COOKIE_SERIE_USUARIO = 600;
+	public static final int DIAS_EXPIRACION_COOKIE_SERIE_USUARIO = 30;
+	public static final int TIEMPO_MIN_SESION = 30;
 	public static final int NUMERO_IDSERIE_COOKIE = 5;
 	public static final int LONGITUD_CONTRASENA_ALEATORIA = 8;
 	public static final int NUMERO_ELEMENTOS_FILA_PERSONAJES = 6;

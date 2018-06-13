@@ -112,6 +112,8 @@ public class SerieController {
 					indices[i] = i + 1;
 				}
 				
+				boolean esAdministrador = repositorioUsuarios.findByUsuario(nombre).getRoles().contains(repositorioRoles.findByTipo(Constantes.TIPO_ADMINISTRADOR));
+				model.addAttribute("esAdministrador", esAdministrador);
 				model.addAttribute("paginaActual", paginaActual);
 				model.addAttribute(Constantes.MODEL_ATT_SERIES, pages);
 				model.addAttribute("indices", indices);
@@ -128,7 +130,7 @@ public class SerieController {
 			return Constantes.REDIRECT_LOGIN;
 		}
 		catch(Exception ex) {
-			logger.error(String.format("BuscarTtitulo%n%s", Utilidades.formatedExceptionMessage(ex)));	
+			logger.error(String.format("BuscarTtitulo%n%s", Utilidades.formatedExceptionMessage(ex)));
 			model.addAttribute(Constantes.MODEL_ATT_ERROR, "Buscar serie por titulo");
 			model.addAttribute(Constantes.MODEL_ATT_DESCRIPCION, "Se ha producido un error al realizar la busqueda por titulo."
 					+ Constantes.CONTACT_WITH_ADMIN);
@@ -166,6 +168,8 @@ public class SerieController {
 					series = query.getResultList();
 				}
 				
+				boolean esAdministrador = repositorioUsuarios.findByUsuario(nombre).getRoles().contains(repositorioRoles.findByTipo(Constantes.TIPO_ADMINISTRADOR));
+				model.addAttribute("esAdministrador", esAdministrador);
 				model.addAttribute(Constantes.MODEL_ATT_NOMBRE_USUARIO, nombre);
 				model.addAttribute("titulo", tituloSerie);
 				model.addAttribute("nombreActor", nombreActor);

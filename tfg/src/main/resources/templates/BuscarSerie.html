@@ -2,10 +2,14 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>Subir serie</title>
+		<link rel = "icon" type = "image/png" href = "/Images/logo.png" />
 		
 		<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
 		<!-- Website Font style -->
 	    <link rel="stylesheet" href="/webjars/font-awesome/4.6.1/css/font-awesome.min.css" />
+	   	<link rel="stylesheet" th:href="@{/css/Botones.css}" />	    
+	    <link rel="stylesheet" th:href="@{/css/Comunes.css}" />	    
+	    
 	    
 		<script type="text/javascript" src="/webjars/jquery/3.1.1/jquery.min.js"></script>    
 		<script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -20,15 +24,17 @@
 		
 		<nav class="title navbar navbar-default" role="navigation">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-					
-			    </button>
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse"><i class="fas fa-bars"></i></button>
 				<a class="navbar-brand" style="color:#fff" href="#">Wiki Series</a>	
 			</div>
 			
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
 			    <ul class="nav navbar-nav">
 			      <li><a style="color:#fff" href = "/PaginaPrincipal/1">Inicio</a></li>
+			      <li><a style="color:#fff" href="/MisSeries">Mis Series</a></li>
+			      <li><a style="color:#fff" href="/BusquedaAvanzada">Busqueda avanzada</a></li>
+			      <li><a style="color:#fff" href="/Contacto">Contacto</a></li>
+			      <li><a style = "background-color : white; color : #4d90fe;" href="#">Subir serie</a></li>
 			    </ul>
 			  	
 			  	<p class="navbar-text pull-right" style="color:#fff;" th:text="'Hola ' + ${nombreUsuario}"></p>
@@ -57,14 +63,11 @@
 				
 			</div>
 		</div>
+		
 	</body>
 </html>
 
 <style>
-.title{
-	background-color: #4d90fe;
-	border: 0px;
-} 
 
 .stylish-input-group .input-group-addon{
     background: white !important; 
@@ -78,47 +81,5 @@
     border:0;
     background:transparent;
 }
-
-.spaceTop-5{
-	margin-top: 5px;
-
-}
-.spaceTop-25{
-	margin-top: 25px;
-}
-
-
-
-.ocultar{
-	display: none;
-}
-
-.MyButton {
-	-moz-box-shadow:inset 0px 0px 0px 0px #bbdaf7;
-	-webkit-box-shadow:inset 0px 0px 0px 0px #bbdaf7;
-	box-shadow:inset 0px 0px 0px 0px #bbdaf7;
-	background-color:#04aed9;
-	-moz-border-radius:15px;
-	-webkit-border-radius:15px;
-	border-radius:15px;
-	border:1px solid #84bbf3;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Arial;
-	font-size:15px;
-	font-weight:bold;
-	padding:6px 22px;
-	text-decoration:none;
-	text-shadow:0px 1px 0px #528ecc;
-}
-.MyButton:hover {
-	background-color:#378de5;
-}
-.MyButton:active {
-	position:relative;
-	top:1px;
-}
-
 
 </style>

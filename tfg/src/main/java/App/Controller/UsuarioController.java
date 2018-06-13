@@ -74,7 +74,7 @@ public class UsuarioController {
 
 				HttpSession session = httpRequest.getSession();
 				session.setAttribute("user", nombreUsuario);
-				session.setMaxInactiveInterval(300);
+				session.setMaxInactiveInterval(Constantes.TIEMPO_MIN_SESION * 60);
 
 				return "redirect:/PaginaPrincipal/1";
 
@@ -476,6 +476,40 @@ public class UsuarioController {
 		catch(Exception ex) {
 			return Utilidades.logErrorAndGetPageError(ex, "confirmarCambioCorreo", model, "Confirmar cambio de direccion de correo electronico",
 												"Se ha producido un error al cambiar la direccion de correo. Vuelva a intentarlo mas tarde o pongase en contacto con el administrasdor.");
+		}
+	}
+	
+	@RequestMapping(value = "/Contactar", method = RequestMethod.POST)
+	public String enviarMensajeContacto(@RequestParam("subject") String asunto,
+										@RequestParam("message") String mensaje, Model model,
+										HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
+		try {
+			Utilidades.noCachearRespuestaHTTP(httpResponse);
+			HttpSession session = httpRequest.getSession(false);
+			if(session != null) {
+				String nombre = (String) session.getAttribute("user");
+				if(!asunto.equals("na")) {
+					Email email = new Email();
+					Usuario usuario = repositorioUsuarios.findByUsuario(nombre);
+					StringBuilder cuerpoMensaje = email.crearMensajeContacto(usuario, mensaje);
+					if(email.enviarCorreo(Constantes.USUARIO_CORREO_APP + "@gmail.com", asunto, cuerpoMensaje.toString())) {
+						model.addAttribute("enviadoOk", "El mensaje se ha enviado correctamente");
+					}
+					else {
+						model.addAttribute("enviadoError", "Se ha producido un error al enviar el mensaje. Por favor vuelva a intentarlo más tarde.");
+					}
+				}
+				else {
+					model.addAttribute("errorAsunto", "Por favor seleccione el asunto del mensaje");
+				}
+				
+				model.addAttribute(Constantes.MODEL_ATT_NOMBRE_USUARIO, nombre);
+				return "Contacto";
+			}
+			return Constantes.REDIRECT_LOGIN;
+		}
+		catch(Exception ex) {
+			return Utilidades.logErrorAndGetPageError(ex, "enviarMensajeContacto", model, "Enviar mensaje", "Error al enviar mensaje");
 		}
 	}
 

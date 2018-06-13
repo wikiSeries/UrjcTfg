@@ -1,0 +1,108 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Contacto</title>
+		<link rel = "icon" type = "image/png" href = "/Images/logo.png" />
+		
+		<link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="/webjars/font-awesome/4.6.1/css/font-awesome.min.css" />
+		<link rel="stylesheet" th:href="@{/css/Comunes.css}" />	    
+				
+		<script type="text/javascript" src="/webjars/jquery/3.1.1/jquery.min.js"></script>    
+		<script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="/webjars/font-awesome/5.0.6/on-server/js/fontawesome-all.js"></script>
+	</head>
+	
+	<body>
+		
+		<nav class="title navbar navbar-default" role="navigation">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse"><i class="fas fa-bars"></i></button>
+				<a class="navbar-brand" style="color:#fff" href = "#">Wiki Series</a>	
+			</div>
+			
+			<div class="collapse navbar-collapse navbar-ex1-collapse">
+			    <ul class="nav navbar-nav">
+				  <li><a style="color:#fff" href = "/PaginaPrincipal/1">Inicio</a></li>
+			      <li><a style="color:#fff" href="/MisSeries">Mis Series</a></li>
+			      <li><a style="color:#fff" href="/BusquedaAvanzada">Busqueda avanzada</a></li>
+			      <li><a style = "background-color : white; color : #4d90fe;" href="#">Contacto</a></li>
+			    </ul>
+			    
+			   <p class="navbar-text pull-right" id = "usuarioActual" th:attr = "data-usuario = ${nombreUsuario}" style="color:#fff;" th:text="'Hola ' + ${nombreUsuario}"></p>
+			   
+			  	
+			 </div>
+			 
+		</nav>
+		
+		<div class="container">
+			<div class="row spaceTop-50">
+				<div class="col-md-8">
+					<div class = "well well-sm radial-azure-white">
+						<form action = "/Contactar" method = "POST">
+							<div class="row">
+											
+								<div class="col-md-12">
+									<div class = "form-group">
+										<p th:if = "${enviadoOk != null}" class = "colorOk" th:text = "${enviadoOk}"></p>
+										<p th:if = "${enviadoError != null}" class = "colorError" th:text = "${enviadoError}"></p>
+									</div>
+									
+									<div class="form-group">
+											<label class = "text-white" for="subject">*Asunto</label> <span th:if = "${errorAsunto != null}" class = "colorError" th:text = "${errorAsunto}"></span>
+											<select id="subject" name="subject" class="form-control" required="required">
+												<option value="na" selected="">Seleccionar</option>
+												<option value="error">Reporte de error</option>
+												<option value="sugerencia">Sugerencia</option>
+												<option value="otros">Otros</option>
+										</select>
+									</div>
+									
+									<div class="form-group">
+										<label class = "text-white" for="name">*Mensaje</label>
+										<textarea name="message" id="message" class="form-control only-resize-vertical" rows="9" cols="25" maxlength = "500" required="required" placeholder="Introduzca su mensaje" ></textarea>
+									</div>
+									
+									<div class="form-group">
+										<input type="submit" class="btn btn-primary pull-right" id="btnContactUs" value = "Enviar" />
+									</div>
+								</div>
+							
+							</div>
+						</form>
+					</div>
+				</div>
+				
+				<div class="col-md-4 bordes">
+				
+					<form>
+						<div class = "row">
+							<br/>
+							<div class = "col-md-3">
+								<img th:src="@{/Images/logo.png}" id="imgLogo" class="img-circle img-responsive"/>
+							</div>
+							<div class = "col-md-9">
+								<h3>Quienes somos</h3>
+							</div>
+							
+						</div>
+						<hr class = "hrClass"></hr>
+						<address>
+							<strong>Wiki Series</strong><br/>
+
+							<p>Somos un equipo de desarrollo dedicado a la implementacion de la gestion de la informacion de las series de television y todas sus relaciones.</p>
+						</address>
+						
+						<address>
+							<strong>Direccion de correo</strong><br/>
+							<a href="#">wikiseriestfg@gmail.com</a>
+						</address>
+					</form>
+				
+				</div>			
+			</div>
+		</div>
+	</body>
+</html>

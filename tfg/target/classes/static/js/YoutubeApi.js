@@ -1,3 +1,11 @@
+$(document).ready(function(){
+	$("#textoConsulta").keyup(function(event){
+		if(event.keyCode === 13){
+			buscarVideo();
+		}
+	})
+})
+
 function buscarVideo(){
 	var query = document.getElementById("textoConsulta").value;
 	
@@ -5,9 +13,10 @@ function buscarVideo(){
 		part:'snippet, id',
 		type:'video',
 		q:query,
-		order: 'rating',
+		order: 'relevance',
 		maxResults: 10,
 		videoDuration: 'short',
+		regionCode: 'ES',
 		key:'AIzaSyA7StfLebxLwS0kpD08wroknCluZ9AFi7w'},
 		mostrarVideos, 'json');
 	

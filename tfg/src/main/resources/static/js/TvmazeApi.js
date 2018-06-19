@@ -1,3 +1,10 @@
+$(document).ready(function(){
+	$("#tituloSerie").keyup(function(event){
+		if(event.keyCode === 13){
+			buscarListaSeries();
+		}
+	})
+})
 function buscarListaSeries(){
 	var consulta = document.getElementById("tituloSerie").value;
 	$.get("https://api.tvmaze.com/search/shows?q="+consulta, mostrarResultadosBusqueda, "json");

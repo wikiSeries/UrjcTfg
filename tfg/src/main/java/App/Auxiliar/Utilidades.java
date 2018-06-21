@@ -153,7 +153,7 @@ public class Utilidades {
 		newValueCookie = String.format("%s,%s", extensionCookie, newValueCookie);
 		String newValueCookieCod = getTextEncoded(newValueCookie);
 		cookie.setValue(newValueCookieCod);
-		//cookie.setMaxAge(Constantes.DIAS_EXPIRACION_COOKIE_SERIE_USUARIO * 3600);
+		cookie.setMaxAge(Constantes.DIAS_EXPIRACION_COOKIE_SERIE_USUARIO * 3600);
 		cookie.setPath("/");
 	}
 

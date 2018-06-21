@@ -68,5 +68,6 @@ function eliminarSerie(id){
 	});
 }
 
+
  
 
